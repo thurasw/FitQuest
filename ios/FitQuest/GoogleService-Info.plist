@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>931307349096-r64n2qj0ltasj851jahq074ldrr4cdua.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.931307349096-r64n2qj0ltasj851jahq074ldrr4cdua</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>931307349096-pm3pq1ounsvj7ee6jl4qg346g1r2mv0k.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCrx6yCS8Sy5vzNvD9jVz3aX9frR9WEX5g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>931307349096</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>me.thurasw.fitquest</string>
+	<key>PROJECT_ID</key>
+	<string>fitquest-9736e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fitquest-9736e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:931307349096:ios:73b9def78a45544e17c7dd</string>
+</dict>
+</plist>
