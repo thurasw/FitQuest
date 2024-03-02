@@ -13,7 +13,7 @@ export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTy
             setError
         );
         return unsub;
-    }, []);
+    }, [ document?.path ]);
 
     return { data, error };
 }
@@ -30,7 +30,7 @@ export const useFirestoreCollection = <T extends {}>(collection: FirebaseFiresto
             setError
         );
         return unsub;
-    }, []);
+    }, [ collection?.path ]);
 
     return { data, error };
 }
