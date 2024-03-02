@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
+import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import Container from '../common/Container';
 
-const Login = () => {
+export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,7 +16,7 @@ const Login = () => {
     };
 
     return (
-        <View>
+        <Container>
             <TextInput
                 placeholder="Username"
                 value={username}
@@ -28,8 +29,10 @@ const Login = () => {
                 onChangeText={setPassword}
             />
             <Button title="Login" onPress={handleLogin} />
-        </View>
+        </Container>
     );
 };
 
-export default Login;
+const styles = StyleSheet.create({
+    
+});

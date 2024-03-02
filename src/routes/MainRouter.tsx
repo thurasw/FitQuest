@@ -36,7 +36,7 @@ export default function MainRouter() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={MainRoutes.LANDING}>
+            <Stack.Navigator initialRouteName={MainRoutes.LANDING} screenOptions={{ headerShown: false }}>
                 {
                     isAuthenticated ? (
                         user?.setup_complete ? (
