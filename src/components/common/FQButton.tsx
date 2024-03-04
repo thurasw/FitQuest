@@ -2,7 +2,7 @@ import { TouchableOpacity, TouchableOpacityProps, StyleSheet, Text } from "react
 import stylesheet from "../../stylesheet";
 
 interface FQButtonProps extends TouchableOpacityProps {
-    variant: 'primary' | 'white';
+    variant: 'primary' | 'white' | 'transparent';
     label?: string;
     labelFontSize?: number;
 }
@@ -40,5 +40,9 @@ const styles = StyleSheet.create({
     white: {
         backgroundColor: 'white',
         color: 'black'
+    },
+    transparent: {
+        backgroundColor: 'transparent',
+        color: 'white'
     }
 });

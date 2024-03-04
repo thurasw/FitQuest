@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../components/auth/Login";
 import Signup from "../components/auth/Signup";
 import Landing from "../components/auth/Landing";
@@ -22,7 +22,7 @@ export enum MainRoutes {
     HOME = "HomeRouter"
 }
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 export default function MainRouter() {
 
     const { isAuthenticated, isInitializing } = useAuth();

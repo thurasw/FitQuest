@@ -1,7 +1,6 @@
 import { ViewProps, StyleSheet } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMemo } from "react";
 
 interface ContainerProps extends ViewProps {
     children: React.ReactNode;
@@ -14,8 +13,8 @@ export default function Container({ children, statusBarPadding = true, ...props 
     const insetStyle = statusBarPadding ? {
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
-        paddingLeft: insets.left,
-        paddingRight: insets.right
+        paddingLeft: insets.left + 20,
+        paddingRight: insets.right + 20
     } : {};
 
     return (
@@ -25,7 +24,6 @@ export default function Container({ children, statusBarPadding = true, ...props 
                 StyleSheet.compose([style.container, insetStyle], props.style)
             }
             colors={['#151515', '#030A19']}
-            
         >
             { children }
         </LinearGradient>
