@@ -40,7 +40,8 @@
 						"useFrameworks": "static"
 					}
 				}
-			]
+			],
+			"./app.plugin.js"
 		]
 	}
 }

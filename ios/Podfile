@@ -53,6 +53,22 @@ target 'FitQuest' do
     :flipper_configuration => flipper_config
   )
 
+# @generated begin static-rnscreen - expo prebuild (DO NOT MODIFY) sync-46100580a71bb002c83fb49ba7155ac6afdb5212
+
+  $static_framework = ['RNScreens']
+
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+    installer.pod_targets.each do |pod|
+      if $static_framework.include?(pod.name)
+        def pod.build_type;
+          Pod::BuildType.static_library
+        end
+      end
+    end
+  end
+
+# @generated end static-rnscreen
   post_install do |installer|
     react_native_post_install(
       installer,
