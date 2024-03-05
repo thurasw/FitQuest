@@ -1,21 +1,57 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { Text } from "react-native";
+import { Text, View, useWindowDimensions } from "react-native";
 import { MainRoutes } from "../../routes/MainRouter";
 import Container from "../common/Container";
 import FQButton from "../common/FQButton";
-import Animated from 'react-native-reanimated';
+import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import styles from "./auth.styles";
 import { useEffect, useState } from "react";
+import PrimaryGradient from "../common/PrimaryGradient";
 
 export default function Landing() {
 
     /* Hooks */
     const navigation = useNavigation() as any;
     const isFocused = useIsFocused();
+    const { width } = useWindowDimensions();
 
-    const [ titleLabel, setTitleLabel ] = useState('FitQuest.');
+    /** Taglines */
+    const taglines = [
+        `Level up your\nFitness journey today!`,
+        'Transform your workouts\nOne level at a time!',
+        'Unlock your best self\nThrough fitness fun!'
+    ];
+
+    /** Animate taglines */
+    const taglineTranslates = useSharedValue([ 0, width, -width ]);
+
+    // Translate X values for taglines every 3s
+    useEffect(() => {
+        taglineTranslates.value = withRepeat(
+            withSequence(
+                withDelay(3000, withSpring([0, width, -width])),
+                withTiming([0, width, width], { duration: 0 }),
+                withDelay(3000, withSpring([-width, 0, width])),
+                withDelay(3000, withSpring([-width, -width, 0])),
+                withTiming([width, width, 0], { duration: 0 }),
+            ), -1
+        );
+    }, []);
+
+    // Styles for each tagline from the shared values
+    const tagline1Style = useAnimatedStyle(() => ({
+        transform: [{ translateX: taglineTranslates.value[0] }]
+    }));
+    const tagline2Style = useAnimatedStyle(() => ({
+        transform: [{ translateX: taglineTranslates.value[1] }]
+    }));
+    const tagline3Style = useAnimatedStyle(() => ({
+        transform: [{ translateX: taglineTranslates.value[2] }]
+    }));
+    
 
     // Reset title label when the user navigates back to the landing page
+    const [ titleLabel, setTitleLabel ] = useState('FitQuest.');
     useEffect(() => {
         if (isFocused) {
             setTitleLabel('FitQuest.');
@@ -47,21 +83,33 @@ export default function Landing() {
             />
             <Animated.View
                 sharedTransitionTag="landingTitlePill"
-                style={[styles.titlePill, {
+                style={{
                     position: 'absolute',
                     top: '40%',
                     zIndex: 1
-                }]}
+                }}
             >
-                <Text style={styles.title}>{ titleLabel }</Text>
+                <PrimaryGradient style={styles.titlePill}>
+                    <Text style={styles.title}>{ titleLabel }</Text>
+                </PrimaryGradient>
             </Animated.View>
 
-            <Text style={styles.tagline}>
-                Level up your fitness journey today!
-            </Text>
+            {/* Tagline */}
+            <View style={{ flexDirection: 'row' }}>
+                {
+                    taglines.map((tagline, index) => (
+                        <Animated.Text
+                            key={index}
+                            style={[styles.tagline, index === 0 ? tagline1Style : index === 1 ? tagline2Style : tagline3Style]}
+                        >
+                            { tagline }
+                        </Animated.Text>
+                    ))
+                }
+            </View>
 
             <FQButton
-                variant="primary"
+                variant="primary_gradient"
                 labelFontSize={20}
                 label="Get Started"
                 onPress={goToSignup}

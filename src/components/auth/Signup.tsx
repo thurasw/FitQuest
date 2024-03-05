@@ -11,6 +11,7 @@ import FQButton from '../common/FQButton';
 import FormInput from '../common/FormInput';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import PrimaryGradient from '../common/PrimaryGradient';
 
 const signupSchema = z.object({
     firstName: z.string().min(1),
@@ -94,13 +95,15 @@ export default function Signup() {
             />
             <Animated.View
                 sharedTransitionTag="landingTitlePill"
-                style={[styles.titlePill, {
+                style={{
                     position: 'absolute',
                     top: '20%',
                     zIndex: 1
-                }]}
+                }}
             >
-                <Text style={styles.title}>Sign up</Text>
+                <PrimaryGradient style={styles.titlePill}>
+                    <Text style={styles.title}>Sign up</Text>
+                </PrimaryGradient>
             </Animated.View>
 
             <View style={{ padding: 25, marginTop: 50, flexGrow: 1 }}>
@@ -156,7 +159,7 @@ export default function Signup() {
                 
                 {/* Submit button */}
                 <FQButton
-                    variant='primary'
+                    variant='primary_gradient'
                     label='Create an account'
                     labelFontSize={20}
                     onPress={handleSubmit(handleSignup)}

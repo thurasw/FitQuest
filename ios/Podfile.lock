@@ -1921,6 +1921,8 @@ PODS:
     - React-logger (= 0.73.4)
     - React-perflogger (= 0.73.4)
   - RecaptchaInterop (100.0.0)
+  - RNCMaskedView (0.3.0):
+    - React-Core
   - RNFBApp (19.0.0):
     - Firebase/CoreOnly (= 10.21.0)
     - React-Core
@@ -2016,6 +2018,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
@@ -2177,6 +2180,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-masked-view/masked-view"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
@@ -2277,6 +2282,7 @@ SPEC CHECKSUMS:
   React-utils: 21a798438d45e70ed9c2e2fe0894ee32ba7b7c5b
   ReactCommon: dcc65c813041388dead6c8b477444757425ce961
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  RNCMaskedView: f7c74478c83c4fdfc5cf4df51f80c0dd5cf125c6
   RNFBApp: 495bf6662800c670fe8e9629d4de0cba72c78b0a
   RNFBAuth: d0e8884d0faad40f36117ad38458174b3129fdea
   RNFBFirestore: 9a607cc7ea6043cbc926db01c78b5e865e0624dd

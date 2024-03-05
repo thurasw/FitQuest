@@ -1,41 +1,61 @@
 import { TouchableOpacity, TouchableOpacityProps, StyleSheet, Text } from "react-native";
 import stylesheet from "../../stylesheet";
+import PrimaryGradient from "./PrimaryGradient";
 
 interface FQButtonProps extends TouchableOpacityProps {
-    variant: 'primary' | 'white' | 'transparent';
+    variant: 'primary' | 'primary_gradient' | 'white' | 'transparent';
     label?: string;
     labelFontSize?: number;
+    maskElement?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
 }
 
-export default function FQButton({ variant, label, labelFontSize, ...props } : FQButtonProps) {
+export default function FQButton({ variant, label, labelFontSize, maskElement, ...props } : FQButtonProps) {
+
+    const isGradient = () => {
+        return variant === 'primary_gradient';
+    };
+
+    const content = (
+        props.children || (
+            <Text
+                style={{
+                    fontSize: labelFontSize || 15,
+                    color: variants[variant].color
+                }}
+            >
+                { label }
+            </Text>
+        )
+    );
+
     return (
         <TouchableOpacity
             activeOpacity={0.8}
             {...props}
             style={StyleSheet.compose([
-                styles.button,
-                styles[variant]
+                isGradient() ? {} : styles.container,
+                {
+                    backgroundColor: variants[variant].backgroundColor
+                }
             ], props.style)}
         >
-            { label === undefined ? props.children : (
-                <Text style={{ fontSize: labelFontSize || 15 }}>{ label }</Text>
-            )}
+            { isGradient() ? (
+                <PrimaryGradient style={styles.container}>
+                    {content}
+                </PrimaryGradient>
+            ) : content }
         </TouchableOpacity>
     )
 };
 
-const styles = StyleSheet.create({
-    button: {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 8,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
+const variants = {
     primary: {
         backgroundColor: stylesheet.colors.primary,
         color: 'black'
+    },
+    primary_gradient: {
+        backgroundColor: 'transparent',
+        color: 'black',
     },
     white: {
         backgroundColor: 'white',
@@ -44,5 +64,16 @@ const styles = StyleSheet.create({
     transparent: {
         backgroundColor: 'transparent',
         color: 'white'
+    }
+};
+
+const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 8,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

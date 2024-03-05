@@ -11,6 +11,7 @@ import Animated from 'react-native-reanimated';
 import styles from './auth.styles';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import PrimaryGradient from '../common/PrimaryGradient';
 
 // Form validation schema
 const loginSchema = z.object({
@@ -65,13 +66,15 @@ export default function Login() {
             />
             <Animated.View
                 sharedTransitionTag="landingTitlePill"
-                style={[styles.titlePill, {
+                style={{
                     position: 'absolute',
                     top: '20%',
                     zIndex: 1
-                }]}
+                }}
             >
-                <Text style={styles.title}>Sign in</Text>
+                <PrimaryGradient style={styles.titlePill}>
+                    <Text style={styles.title}>Sign in</Text>
+                </PrimaryGradient>
             </Animated.View>
 
             <View style={{ padding: 25, marginTop: 50, flexGrow: 1 }}>
@@ -96,7 +99,7 @@ export default function Login() {
                 <FQButton
                     label='Sign in'
                     labelFontSize={20}
-                    variant='primary'
+                    variant='primary_gradient'
                     onPress={handleSubmit(login)}
                     style={{
                         marginBottom: '20%',

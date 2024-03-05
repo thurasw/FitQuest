@@ -20,6 +20,7 @@ export default StyleSheet.create({
         fontSize: 30,
         marginHorizontal: 35,
         marginTop: 75,
-        color: 'white'
+        color: 'white',
+        position: 'absolute'
     }
 });
