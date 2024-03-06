@@ -3,7 +3,7 @@ import { Text, View, useWindowDimensions } from "react-native";
 import { MainRoutes } from "../../routes/MainRouter";
 import Container from "../common/Container";
 import FQButton from "../common/FQButton";
-import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import styles from "./auth.styles";
 import { useEffect, useState } from "react";
 import PrimaryGradient from "../common/PrimaryGradient";
@@ -11,7 +11,7 @@ import PrimaryGradient from "../common/PrimaryGradient";
 export default function Landing() {
 
     /* Hooks */
-    const navigation = useNavigation() as any;
+    const navigation = useNavigation();
     const isFocused = useIsFocused();
     const { width } = useWindowDimensions();
 

@@ -6,10 +6,9 @@ interface FQButtonProps extends TouchableOpacityProps {
     variant: 'primary' | 'primary_gradient' | 'white' | 'transparent';
     label?: string;
     labelFontSize?: number;
-    maskElement?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
 }
 
-export default function FQButton({ variant, label, labelFontSize, maskElement, ...props } : FQButtonProps) {
+export default function FQButton({ variant, label, labelFontSize, ...props } : FQButtonProps) {
 
     const isGradient = () => {
         return variant === 'primary_gradient';
