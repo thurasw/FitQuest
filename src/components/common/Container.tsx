@@ -1,5 +1,4 @@
-import { ViewProps, StyleSheet } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import { ViewProps, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface ContainerProps extends ViewProps {
@@ -7,7 +6,7 @@ interface ContainerProps extends ViewProps {
     statusBarPadding?: boolean;
 }
 
-export default function Container({ children, statusBarPadding = true, ...props } : ContainerProps) {
+export default function Container({ children, statusBarPadding = false, ...props } : ContainerProps) {
 
     const insets = useSafeAreaInsets();
     const insetStyle = statusBarPadding ? {
@@ -18,15 +17,14 @@ export default function Container({ children, statusBarPadding = true, ...props 
     } : {};
 
     return (
-        <LinearGradient
+        <View
             {...props}
             style={
                 StyleSheet.compose([style.container, insetStyle], props.style)
             }
-            colors={['#151515', '#030A19']}
         >
             { children }
-        </LinearGradient>
+        </View>
     )
 };
 
@@ -34,8 +32,8 @@ const style = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        flexGrow: 1,
         width: '100%',
-        backgroundColor: 'transparent'
+        backgroundColor: '#E7EEF6'
     }
 });

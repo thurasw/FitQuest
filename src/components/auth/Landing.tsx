@@ -71,7 +71,7 @@ export default function Landing() {
     };
 
     return (
-        <Container statusBarPadding={false}>
+        <Container style={{ backgroundColor: '#151515' }}>
             {/* Landing image and title */}
             <Animated.Image
                 sharedTransitionTag="landingImg"
@@ -115,7 +115,7 @@ export default function Landing() {
                 onPress={goToSignup}
                 style={{
                     marginHorizontal: 20,
-                    marginBottom: 25,
+                    marginBottom: 15,
                     marginTop: 'auto'
                 }}
             />
@@ -127,7 +127,7 @@ export default function Landing() {
                     marginBottom: '20%'
                 }}
             >
-                <Text style={{ color: 'white' }}>
+                <Text style={{ color: 'white', fontSize: 15 }}>
                     Already a member?
                     <Text style={{ fontWeight: 'bold' }}> Sign in</Text>
                 </Text>

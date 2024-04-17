@@ -42,7 +42,7 @@ export default function Login() {
     };
 
     return (
-        <Container statusBarPadding={false}>
+        <Container style={{ backgroundColor: '#151515' }}>
             <FQButton
                 variant='transparent'
                 style={{

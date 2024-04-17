@@ -3,7 +3,7 @@ import stylesheet from "../../stylesheet";
 import PrimaryGradient from "./PrimaryGradient";
 
 interface FQButtonProps extends TouchableOpacityProps {
-    variant: 'primary' | 'primary_gradient' | 'white' | 'transparent';
+    variant: 'primary' | 'primary_outline' | 'primary_gradient' | 'white' | 'transparent';
     label?: string;
     labelFontSize?: number;
 }
@@ -34,8 +34,10 @@ export default function FQButton({ variant, label, labelFontSize, ...props } : F
             style={StyleSheet.compose([
                 isGradient() ? {} : styles.container,
                 {
-                    backgroundColor: variants[variant].backgroundColor
-                }
+                    borderWidth: 2,
+                    borderColor: 'transparent'
+                },
+                variants[variant]
             ], props.style)}
         >
             { isGradient() ? (
@@ -51,6 +53,11 @@ const variants = {
     primary: {
         backgroundColor: stylesheet.colors.primary,
         color: 'black'
+    },
+    primary_outline: {
+        backgroundColor: 'transparent',
+        color: stylesheet.colors.primary,
+        borderColor: stylesheet.colors.primary
     },
     primary_gradient: {
         backgroundColor: 'transparent',

@@ -5,20 +5,18 @@ import Signup from "../components/auth/Signup";
 import Landing from "../components/auth/Landing";
 import { useAuth } from "../providers/AuthProvider";
 import HomeRouter from "./HomeRouter";
-import Setup1 from "../components/setup/Setup1";
 import { useUser } from "../firestore/user.api";
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
+import OnboardingRouter from "./OnboardingRouter";
 
 export enum MainRoutes {
     //UNAUTHENTICATED ROUTES
     LANDING = "Landing",
     LOGIN = "Login",
     SIGNUP = "Signup",
-    //IN BETWEEN ROUTES
-    SETUP1 = "Setup1",
-    SETUP2 = "Setup2",
     //AUTHENTICATED ROUTES
+    ONBOARDING = "Onboarding",
     HOME = "HomeRouter"
 }
 
@@ -27,6 +25,8 @@ export default function MainRouter() {
 
     const { isAuthenticated, isInitializing } = useAuth();
     const { data: user } = useUser();
+
+    const setupComplete = user !== undefined && user.workoutTime !== 0 && user.workoutDays.length > 0;
 
     useEffect(() => {
         if (!isInitializing && (!isAuthenticated || user !== undefined)) {
@@ -39,12 +39,12 @@ export default function MainRouter() {
             <Stack.Navigator initialRouteName={MainRoutes.LANDING} screenOptions={{ headerShown: false }}>
                 {
                     isAuthenticated ? (
-                        user?.setup_complete ? (
+                        setupComplete ? (
                             // Setup complete, proceed to home
                             <Stack.Screen name={MainRoutes.HOME} component={HomeRouter} />
                         ) : (
-                            // Only render setup routes
-                            <Stack.Screen name={MainRoutes.SETUP1} component={Setup1} />
+                            // Setup incomplete, proceed to onboarding
+                            <Stack.Screen name={MainRoutes.ONBOARDING} component={OnboardingRouter} />
                         )
                     ) : (
                         // Unauthenticated routes

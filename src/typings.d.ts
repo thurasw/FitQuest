@@ -8,9 +8,8 @@ declare global {
             lastName: string;
             level: number;
             points: number;
-            setup_complete: boolean;
-            workout_days: number[];
-            streak_start: FirebaseFirestoreTypes.Timestamp | null;
+            workoutDays: number[];
+            workoutTime: number;
         }
     }
 }

@@ -61,9 +61,8 @@ export default function Signup() {
                 ...data,
                 level: 1,
                 points: 0,
-                streak_start: null,
-                setup_complete: false,
-                workout_days: []
+                workoutDays: [],
+                workoutTime: 0
             })
         })
         .catch((err) => {
@@ -72,7 +71,7 @@ export default function Signup() {
     };
 
     return (
-        <Container statusBarPadding={false}>
+        <Container style={{ backgroundColor: '#151515' }}>
             <FQButton
                 variant='transparent'
                 style={{
