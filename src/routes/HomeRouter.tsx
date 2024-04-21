@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../components/home/Home";
 import Avatar from "../components/home/Avatar";
-import Workouts from "../components/home/Workouts";
+import Workouts from "../components/home/workouts/Workouts";
 import Profile from "../components/home/Profile";
 import { Ionicons } from '@expo/vector-icons';
 import { GradientIcon, GradientText } from "../components/common/PrimaryGradient";
