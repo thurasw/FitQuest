@@ -1,28 +1,18 @@
-import { TouchableOpacity, TouchableOpacityProps, StyleSheet, Text } from "react-native";
-import stylesheet from "../../stylesheet";
+import { TouchableOpacity, TouchableOpacityProps, StyleSheet, Text, TextProps, StyleProp, ViewStyle } from "react-native";
 import PrimaryGradient from "./PrimaryGradient";
 
 interface FQButtonProps extends TouchableOpacityProps {
-    variant: 'primary' | 'primary_outline' | 'primary_gradient' | 'white' | 'transparent';
+    textProps?: TextProps;
     label?: string;
-    labelFontSize?: number;
+    Gradient?: React.FC<{ children: React.ReactNode; style: StyleProp<ViewStyle> }>;
 }
 
-export default function FQButton({ variant, label, labelFontSize, ...props } : FQButtonProps) {
-
-    const isGradient = () => {
-        return variant === 'primary_gradient';
-    };
+export default function FQButton({ className, label, textProps, Gradient, ...props } : FQButtonProps) {
 
     const content = (
         props.children || (
-            <Text
-                style={{
-                    fontSize: labelFontSize || 15,
-                    color: variants[variant].color
-                }}
-            >
-                { label }
+            <Text {...textProps}>
+                {label}
             </Text>
         )
     );
@@ -31,46 +21,18 @@ export default function FQButton({ variant, label, labelFontSize, ...props } : F
         <TouchableOpacity
             activeOpacity={0.8}
             {...props}
-            style={StyleSheet.compose([
-                isGradient() ? {} : styles.container,
-                {
-                    borderWidth: 2,
-                    borderColor: 'transparent'
-                },
-                variants[variant]
-            ], props.style)}
+            className={
+                `border-2 border-transparent ${className}`
+            }
+            style={StyleSheet.compose(Gradient !== undefined ? {} : styles.container, props.style)}
         >
-            { isGradient() ? (
-                <PrimaryGradient style={styles.container}>
+            { Gradient !== undefined ? (
+                <Gradient style={styles.container}>
                     {content}
-                </PrimaryGradient>
+                </Gradient>
             ) : content }
         </TouchableOpacity>
     )
-};
-
-const variants = {
-    primary: {
-        backgroundColor: stylesheet.colors.primary,
-        color: 'black'
-    },
-    primary_outline: {
-        backgroundColor: 'transparent',
-        color: stylesheet.colors.primary,
-        borderColor: stylesheet.colors.primary
-    },
-    primary_gradient: {
-        backgroundColor: 'transparent',
-        color: 'black',
-    },
-    white: {
-        backgroundColor: 'white',
-        color: 'black'
-    },
-    transparent: {
-        backgroundColor: 'transparent',
-        color: 'white'
-    }
 };
 
 const styles = StyleSheet.create({

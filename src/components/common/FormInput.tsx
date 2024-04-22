@@ -1,70 +1,36 @@
 import React, { useMemo, useState } from 'react';
-import { TextInput, Text, View, StyleSheet, TextInputProps } from 'react-native';
+import { TextInput, Text, View, StyleSheet, TextInputProps, ViewProps } from 'react-native';
 import { useController, Control, FieldValues, Path } from 'react-hook-form';
 
 // TS generics to extract accurate typings for fieldName
 interface FormInputProps<T extends FieldValues> extends TextInputProps {
     control: Control<T>;
     fieldName: Path<T>;
+    containerProps?: ViewProps;
 }
 
-export default function FormInput<T extends FieldValues>({ control, fieldName, ...props }: FormInputProps<T>) {
+export default function FormInput<T extends FieldValues>({ control, fieldName, className, containerProps, ...props }: FormInputProps<T>) {
 
     const { field, fieldState } = useController({
         control,
         name: fieldName
     });
 
-    const [ isFocused, setIsFocused ] = useState(false);
-
-    const borderColor = useMemo(() => {
-        if (fieldState.invalid && fieldState.isTouched) {
-            return 'crimson';
-        } else if (isFocused) {
-            return '#4c4c4c';
-        } else {
-            return 'transparent';
-        }
-    }, [ isFocused, fieldState.invalid, fieldState.isTouched ])
-
     return (
-        <View style={styles.container}>
+        <View className='mb-3' {...containerProps}>
             <TextInput
-                style={[styles.input, { borderColor }]}
+                className={`rounded-lg border p-3 text-black bg-slate-100 ${ fieldState.invalid && fieldState.isTouched ? 'border-red-500' : 'border-transparent focus:border-slate-300' } ${className}`}
                 placeholderTextColor='#5c5c5c'
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => {
-                    setIsFocused(false);
-                    field.onBlur();
-                }}
                 value={field.value}
                 onChangeText={field.onChange}
+                onBlur={field.onBlur}
                 {...props}
             />
             {fieldState.invalid && fieldState.isTouched && fieldState.error?.message && (
-                <Text style={styles.error}>
+                <Text className='text-red-500 mt-2'>
                     {fieldState.error?.message}
                 </Text>
             )}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        marginBottom: 15,
-    },
-    input: {
-        borderRadius: 6,
-        borderWidth: 1,
-        color: 'white',
-        backgroundColor: 'black',
-        paddingHorizontal: 12,
-        paddingVertical: 12,
-        fontSize: 17
-    },
-    error: {
-        color: 'crimson',
-        marginTop: 5,
-    },
-});

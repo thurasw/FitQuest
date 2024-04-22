@@ -5,15 +5,12 @@ import { useState } from "react";
 import FQButton from "../common/FQButton";
 import { OnboardingParamList } from "../../routes/types";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { HomeRoutes } from "../../routes/HomeRouter";
-import { MainRoutes } from "../../routes/MainRouter";
 import { editUser } from "../../firestore/user.api";
 import { useAuth } from "../../providers/AuthProvider";
 
 export default function Step2() {
     const [ selectedTime, setSelectedTime ] = useState<Date>();
 
-    const navigation = useNavigation();
     const route = useRoute<RouteProp<OnboardingParamList>>();
     const auth = useAuth();
 
@@ -54,8 +51,9 @@ export default function Step2() {
 
             <FQButton
                 label='Next'
-                variant='primary'
-                style={{
+                className='bg-primary-900'
+                textProps={{
+                    className: 'text-white text-xl font-semibold'
                 }}
                 onPress={goNext}
             />

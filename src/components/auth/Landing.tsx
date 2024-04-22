@@ -109,8 +109,10 @@ export default function Landing() {
             </View>
 
             <FQButton
-                variant="primary_gradient"
-                labelFontSize={20}
+                Gradient={PrimaryGradient}
+                textProps={{
+                    className: 'text-white text-xl font-semibold'
+                }}
                 label="Get Started"
                 onPress={goToSignup}
                 style={{
@@ -120,7 +122,6 @@ export default function Landing() {
                 }}
             />
             <FQButton
-                variant="transparent"
                 onPress={goToLogin}
                 style={{
                     marginHorizontal: 20,

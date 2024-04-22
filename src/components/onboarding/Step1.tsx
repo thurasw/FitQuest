@@ -82,7 +82,10 @@ export default function Step1() {
                     options.map(option => (
                         <Fragment key={option.label}>
                             <FQButton
-                                variant={activeOption.label === option.label ? 'primary' : 'primary_outline'}
+                                className={activeOption.label === option.label ? 'bg-primary-900' : 'border-primary-900'}
+                                textProps={{
+                                    className: activeOption.label === option.label ? 'text-white' : 'text-primary-900'
+                                }}
                                 label={option.label}
                                 onPress={() => setActiveOption(option)}
                             />
@@ -93,7 +96,10 @@ export default function Step1() {
                                             customOptions.map((day, index) => (
                                                 <FQButton
                                                     key={index}
-                                                    variant={activeOption.value.includes(day.value) ? 'primary' : 'primary_outline'}
+                                                    className={activeOption.value.includes(day.value) ? 'bg-primary-900' : 'border-primary-900'}
+                                                    textProps={{
+                                                        className: activeOption.value.includes(day.value) ? 'text-white' : 'text-primary-900'
+                                                    }}
                                                     style={{ paddingHorizontal: 10, paddingVertical: 10 }}
                                                     label={day.label}
                                                     onPress={() => {
@@ -122,7 +128,10 @@ export default function Step1() {
             </View>
 
             <FQButton
-                variant='primary'
+                className='bg-primary-900'
+                textProps={{
+                    className: 'text-white text-xl font-semibold'
+                }}
                 style={[styles.nextButton]}
                 label='Next'
                 onPress={goNext}

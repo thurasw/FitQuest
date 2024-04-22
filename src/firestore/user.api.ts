@@ -11,7 +11,7 @@ export const getUserCollection = () => firestore().collection<FitQuest.User>(USE
 export const getUserDocument = (uid: string) => getUserCollection().doc(uid);
 
 /**
- * Hook for live updates to the user document
+ * Hook for live updates
  */
 export const useUser = () => {
     const { user } = useAuth();
@@ -21,7 +21,7 @@ export const useUser = () => {
 }
 
 /**
- * CRUD operations for the user document
+ * CRUD operations
  */
 export const createUser = (uid: string, data: FitQuest.User) => {
     return getUserDocument(uid).set(data);

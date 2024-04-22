@@ -73,7 +73,6 @@ export default function Signup() {
     return (
         <Container style={{ backgroundColor: '#151515' }}>
             <FQButton
-                variant='transparent'
                 style={{
                     position: 'absolute',
                     top: '7%',
@@ -113,6 +112,7 @@ export default function Signup() {
                     placeholder='First Name'
                     autoComplete='given-name'
                     enterKeyHint='next'
+                    className='bg-neutral-800 text-white'
                 />
                 <FormInput
                     control={control}
@@ -120,6 +120,7 @@ export default function Signup() {
                     placeholder='Last Name'
                     autoComplete='family-name'
                     enterKeyHint='next'
+                    className='bg-neutral-800 text-white'
                 />
                 
                 <FormInput
@@ -130,6 +131,7 @@ export default function Signup() {
                     keyboardType='email-address'
                     autoCapitalize='none'
                     enterKeyHint='next'
+                    className='bg-neutral-800 text-white'
                 />
                 <FormInput
                     control={control}
@@ -138,6 +140,7 @@ export default function Signup() {
                     autoComplete='new-password'
                     secureTextEntry
                     enterKeyHint='next'
+                    className='bg-neutral-800 text-white'
                 />
                 <FormInput
                     control={control}
@@ -146,6 +149,7 @@ export default function Signup() {
                     autoComplete='new-password'
                     secureTextEntry
                     enterKeyHint='next'
+                    className='bg-neutral-800 text-white'
                 />
 
                 <FormInput
@@ -154,17 +158,20 @@ export default function Signup() {
                     placeholder='Date of Birth'
                     autoComplete='birthdate-full'
                     enterKeyHint='send'
+                    className='bg-neutral-800 text-white'
                 />
                 
                 {/* Submit button */}
                 <FQButton
-                    variant='primary_gradient'
+                    Gradient={PrimaryGradient}
                     label='Create an account'
-                    labelFontSize={20}
                     onPress={handleSubmit(handleSignup)}
                     style={{
                         marginBottom: '20%',
                         marginTop: 'auto'
+                    }}
+                    textProps={{
+                        className: 'text-white text-xl font-semibold'
                     }}
                 />
             </View>

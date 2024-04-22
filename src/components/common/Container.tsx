@@ -6,7 +6,7 @@ interface ContainerProps extends ViewProps {
     statusBarPadding?: boolean;
 }
 
-export default function Container({ children, statusBarPadding = false, ...props } : ContainerProps) {
+export default function Container({ children, className, statusBarPadding = false, ...props } : ContainerProps) {
 
     const insets = useSafeAreaInsets();
     const insetStyle = statusBarPadding ? {
@@ -19,21 +19,12 @@ export default function Container({ children, statusBarPadding = false, ...props
     return (
         <View
             {...props}
+            className={`flex flex-col flex-grow w-full bg-slate-100 ${className}`}
             style={
-                StyleSheet.compose([style.container, insetStyle], props.style)
+                StyleSheet.compose(insetStyle, props.style)
             }
         >
             { children }
         </View>
     )
 };
-
-const style = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        width: '100%',
-        backgroundColor: '#E7EEF6'
-    }
-});

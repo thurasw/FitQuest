@@ -11,7 +11,10 @@ export default function Home() {
         <Container>
             <View style={{ marginTop: 20 }}>
                 <FQButton
-                    variant='primary_gradient'
+                    className='bg-primary-900'
+                    textProps={{
+                        className: 'text-white'
+                    }}
                     label='Log out'
                     onPress={() => auth.signOut()}
                 />

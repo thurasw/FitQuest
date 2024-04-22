@@ -44,7 +44,6 @@ export default function Login() {
     return (
         <Container style={{ backgroundColor: '#151515' }}>
             <FQButton
-                variant='transparent'
                 style={{
                     position: 'absolute',
                     top: '7%',
@@ -86,6 +85,7 @@ export default function Login() {
                     keyboardType='email-address'
                     enterKeyHint='next'
                     autoCapitalize='none'
+                    className='bg-neutral-800 text-white'
                 />
                 <FormInput
                     control={control}
@@ -95,15 +95,18 @@ export default function Login() {
                     autoComplete='current-password'
                     blurOnSubmit={true}
                     enterKeyHint='send'
+                    className='bg-neutral-800 text-white'
                 />
                 <FQButton
                     label='Sign in'
-                    labelFontSize={20}
-                    variant='primary_gradient'
+                    Gradient={PrimaryGradient}
                     onPress={handleSubmit(login)}
                     style={{
                         marginBottom: '20%',
                         marginTop: 'auto'
+                    }}
+                    textProps={{
+                        className: 'text-white text-xl font-semibold'
                     }}
                 />
             </View>

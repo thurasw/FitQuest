@@ -35,7 +35,7 @@ export type OnboardingNavigationProp = CompositeNavigationProp<
 export type HomeParamList = {
     [HomeRoutes.HOME]: undefined;
     [HomeRoutes.AVATAR]: undefined;
-    [HomeRoutes.WORKOUTS]: undefined;
+    [HomeRoutes.ROUTINES]: undefined;
     [HomeRoutes.PROFILE]: undefined;
 };
 export type HomeNavigationProp = CompositeNavigationProp<

@@ -11,5 +11,18 @@ declare global {
             workoutDays: number[];
             workoutTime: number;
         }
+
+        interface Routine {
+            name: string;
+            exercises: Exercise[];
+        }
+        interface Exercise {
+            name: string;
+            sets: Set[];
+            amount: string;
+        }
+        interface Set {
+            reps: number;
+        }
     }
 }
