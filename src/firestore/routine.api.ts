@@ -34,3 +34,6 @@ export const createRoutine = (uid: string, data: FitQuest.Routine) => {
 export const editRoutine = (uid: string, routineId: string, data: Partial<FitQuest.Routine>) => {
     return getRoutineDocument(uid, routineId).update(data);
 }
+export const deleteRoutine = (uid: string, routineId: string) => {
+    return getRoutineDocument(uid, routineId).delete();
+}

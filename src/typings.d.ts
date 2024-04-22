@@ -8,7 +8,7 @@ declare global {
             lastName: string;
             level: number;
             points: number;
-            workoutDays: number[];
+            workoutDays: Record<number, FirebaseFirestoreTypes.DocumentReference<Routine> | null>;
             workoutTime: number;
         }
 

@@ -7,6 +7,7 @@ import { OnboardingParamList } from "../../routes/types";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { editUser } from "../../firestore/user.api";
 import { useAuth } from "../../providers/AuthProvider";
+import { createRoutine } from "../../firestore/routine.api";
 
 export default function Step2() {
     const [ selectedTime, setSelectedTime ] = useState<Date>();
@@ -21,9 +22,30 @@ export default function Step2() {
         }
 
         try {
+            // Create default routine
+            const result = await createRoutine(auth.user.uid, {
+                name: 'Default Routine',
+                exercises: [{
+                    name: 'Cardio',
+                    amount: '15min',
+                    sets: [{ reps: 1 }]
+                }, {
+                    name: 'Pushups',
+                    amount: '',
+                    sets: [{ reps: 10 }, { reps: 10 }, { reps: 10 }, { reps: 10 }, { reps: 10 }]
+                }]
+            });
+
             const days = route.params?.days || [];
+            const workoutDays : FitQuest.User['workoutDays'] = {
+                0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null
+            };
+            for (const day of days) {
+                workoutDays[day] = result;
+            }
+
             await editUser(auth.user.uid, {
-                workoutDays: days,
+                workoutDays,
                 workoutTime: selectedTime.valueOf()
             });
         }

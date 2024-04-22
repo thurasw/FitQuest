@@ -26,13 +26,16 @@ export default function MainRouter() {
     const { isAuthenticated, isInitializing } = useAuth();
     const { data: user } = useUser();
 
-    const setupComplete = user !== undefined && user.workoutTime !== 0 && user.workoutDays.length > 0;
+    const setupComplete = user !== undefined && user.workoutTime !== 0;
 
+    const appIsReady = !isInitializing && (!isAuthenticated || user !== undefined);
     useEffect(() => {
-        if (!isInitializing && (!isAuthenticated || user !== undefined)) {
+        if (appIsReady) {
             SplashScreen.hideAsync();
         }
-    }, [ isInitializing, isAuthenticated, user ]);
+    }, [ appIsReady ]);
+
+    if (!appIsReady) return null;
 
     return (
         <NavigationContainer>

@@ -6,13 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FQButton from "../../common/FQButton";
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef } from "react";
-import { createRoutine } from "../../../firestore/routine.api";
+import { createRoutine, deleteRoutine, editRoutine } from "../../../firestore/routine.api";
 import { useAuth } from "../../../providers/AuthProvider";
-
-interface CreateRoutineModalProps {
-    show: boolean;
-    onClose: () => void;
-}
 
 const routineSchema = z.object({
     name: z.string().min(1),
@@ -28,14 +23,33 @@ const routineSchema = z.object({
 });
 type RoutineDto = z.infer<typeof routineSchema>;
 
-export default function CreateRoutineModal({ show, onClose }: CreateRoutineModalProps) {
+interface RoutineModalProps {
+    show: boolean;
+    onClose: () => void;
+
+    routineId?: string;
+    routineToEdit?: FitQuest.Routine;
+}
+export default function RoutineModal({ show, onClose, routineId, routineToEdit }: RoutineModalProps) {
 
     const scrollViewRef = useRef<ScrollView>(null);
     const { user } = useAuth();
 
-    const { handleSubmit, control, setValue, watch, reset } = useForm<RoutineDto>({
-        resolver: zodResolver(routineSchema),
-        defaultValues: {
+    const getDefaultValue = () => {
+        if (routineToEdit) {
+            return {
+                name: routineToEdit.name,
+                exercises: routineToEdit.exercises.map((exercise) => ({
+                    name: exercise.name,
+                    amount: exercise.amount,
+                    sets: exercise.sets.map((set) => ({
+                        reps: String(set.reps)
+                    }))
+                }))
+            }
+        }
+
+        return {
             name: '',
             exercises: [{
                 name: '',
@@ -45,12 +59,18 @@ export default function CreateRoutineModal({ show, onClose }: CreateRoutineModal
                 }]
             }]
         }
+    };
+
+    const { handleSubmit, control, setValue, watch, reset } = useForm<RoutineDto>({
+        resolver: zodResolver(routineSchema),
+        // Typescript doesn't like `reps` to be a string, but it must be a string for the input field
+        defaultValues: getDefaultValue() as any
     });
     const exercises = watch('exercises');
     useEffect(() => {
-        // reset on close
-        if (!show) {
-            reset();
+        // reset on open
+        if (show) {
+            reset(getDefaultValue() as any);
         }
     }, [ show ])
 
@@ -115,6 +135,31 @@ export default function CreateRoutineModal({ show, onClose }: CreateRoutineModal
             Alert.alert('Error', 'Failed to create routine');
         }
     };
+    const editWorkout = async(data: RoutineDto) => {
+        try {
+            await editRoutine(user?.uid!, routineId!, data);
+            onClose();
+        }
+        catch(err) {
+            console.error(err);
+            Alert.alert('Error', 'Failed to edit routine');
+        }
+    };
+    const deleteWorkout = () => {
+        Alert.alert('Delete Routine', 'Are you sure you want to delete this routine?', [
+            {
+                text: 'Cancel',
+                style: 'cancel'
+            },
+            {
+                text: 'Delete',
+                style: 'destructive',
+                onPress: async() => {
+                    await deleteRoutine(user?.uid!, routineId!);
+                }
+            }
+        ]);
+    }
 
     return (
         <Modal
@@ -125,9 +170,17 @@ export default function CreateRoutineModal({ show, onClose }: CreateRoutineModal
         >
             {/* Header */}
             <View className='flex flex-row items-center p-5 bg-neutral-100'>
-                <Text className='invisible'>Cancel</Text>
+                {
+                    routineToEdit && (
+                        <TouchableOpacity
+                            onPress={deleteWorkout}
+                        >
+                            <Text className='text-red-500'>Delete</Text>
+                        </TouchableOpacity>
+                    )
+                }
                 <Text className='font-semibold text-xl text-center ms-auto'>
-                    New Routine
+                    { routineToEdit ? 'Edit' : 'New' } Routine
                 </Text>
                 <TouchableOpacity className='ms-auto' onPress={onClose}>
                     <Text className='text-primary-500'>Cancel</Text>
@@ -234,12 +287,12 @@ export default function CreateRoutineModal({ show, onClose }: CreateRoutineModal
                 {/* Submit button */}
                 <View className='flex-shrink-0 py-5'>
                     <FQButton
-                        label='Create Routine'
+                        label={routineToEdit ? 'Save' : 'Create Routine'}
                         className='mt-auto bg-primary-900'
                         textProps={{
                             className: 'text-white font-semibold text-lg'
                         }}
-                        onPress={handleSubmit(createWorkout)}
+                        onPress={handleSubmit(routineToEdit ? editWorkout : createWorkout)}
                     />
                 </View>
             </View>

@@ -7,7 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { GradientIcon } from "../components/common/PrimaryGradient";
 import { TouchableOpacity, View } from "react-native";
 import { useState } from "react";
-import CreateRoutineModal from "../components/home/routines/CreateRoutineModal";
+import RoutineModal from "../components/home/routines/RoutineModal";
+import AssignRoutinesModal from "../components/home/routines/AssignRoutinesModal";
 
 export enum HomeRoutes {
     HOME = "Home",
@@ -15,28 +16,28 @@ export enum HomeRoutes {
     ROUTINES = "Routines",
     PROFILE = "Profile"
 }
-
 const Tab = createBottomTabNavigator();
+
+const tabBarIcon = (route: string, focused: boolean, size: number) => {
+    let iconName: any;
+    if (route === HomeRoutes.HOME) {
+        iconName = focused ? 'home' : 'home-outline';
+    } else if (route === HomeRoutes.AVATAR) {
+        iconName = focused ? 'person' : 'person-outline';
+    } else if (route === HomeRoutes.ROUTINES) {
+        iconName = focused ? 'barbell' : 'barbell-outline';
+    } else if (route === HomeRoutes.PROFILE) {
+        iconName = focused ? 'settings' : 'settings-outline';
+    }
+    if (focused)
+        return <GradientIcon iconProps={{ name: iconName, size }} Icon={Ionicons} />
+    return <Ionicons name={iconName} size={size} color='#5c5c5c' />
+};
+
 export default function HomeRouter() {
-
-    const tabBarIcon = (route: string, focused: boolean, size: number) => {
-        let iconName: any;
-        if (route === HomeRoutes.HOME) {
-            iconName = focused ? 'home' : 'home-outline';
-        } else if (route === HomeRoutes.AVATAR) {
-            iconName = focused ? 'person' : 'person-outline';
-        } else if (route === HomeRoutes.ROUTINES) {
-            iconName = focused ? 'barbell' : 'barbell-outline';
-        } else if (route === HomeRoutes.PROFILE) {
-            iconName = focused ? 'settings' : 'settings-outline';
-        }
-        if (focused)
-            return <GradientIcon iconProps={{ name: iconName, size }} Icon={Ionicons} />
-        return <Ionicons name={iconName} size={size} color='#5c5c5c' />
-    };
-
     /** Modal states */
     const [ showCreateRoutine, setShowCreateRoutine ] = useState(false);
+    const [ showAssignRoutine, setShowAssignRoutine ] = useState(false);
 
     return (
         <Tab.Navigator
@@ -62,7 +63,15 @@ export default function HomeRouter() {
                             <TouchableOpacity className='me-5' onPress={() => setShowCreateRoutine(true)}>
                                 <Ionicons name="add" size={24} />
                             </TouchableOpacity>
-                            <CreateRoutineModal show={showCreateRoutine} onClose={() => setShowCreateRoutine(false)} />
+                            <RoutineModal show={showCreateRoutine} onClose={() => setShowCreateRoutine(false)} />
+                        </>
+                    ),
+                    headerLeft: () => (
+                        <>
+                            <TouchableOpacity className='ms-5' onPress={() => setShowAssignRoutine(true)}>
+                                <Ionicons name="calendar" size={24} />
+                            </TouchableOpacity>
+                            <AssignRoutinesModal show={showAssignRoutine} onClose={() => setShowAssignRoutine(false)} />
                         </>
                     )
                 }}
