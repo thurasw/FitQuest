@@ -1,47 +1,39 @@
-import { CompositeNavigationProp, NavigatorScreenParams } from "@react-navigation/native";
-import { HomeRoutes } from "./HomeRouter";
-import { MainRoutes } from "./MainRouter";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { OnboardingRoutes } from "./OnboardingRouter";
+import { NavigatorScreenParams } from "@react-navigation/native";
 
 /**
- * Types for main router
+ * Main Router
  */
 export type MainParamList = {
-    [MainRoutes.LANDING]: undefined;
-    [MainRoutes.LOGIN]: undefined;
-    [MainRoutes.SIGNUP]: undefined;
-    [MainRoutes.ONBOARDING]: NavigatorScreenParams<OnboardingParamList>;
-    [MainRoutes.HOME]: NavigatorScreenParams<HomeParamList>;
+    "LANDING": undefined;
+    "LOGIN": undefined;
+    "SIGNUP": undefined;
+    "ONBOARDING": NavigatorScreenParams<OnboardingParamList>;
+    "MAIN": NavigatorScreenParams<HomeParamList>;
 };
-export type MainNavigationProp = NativeStackNavigationProp<MainParamList>;
+export type MainRoutes = keyof MainParamList;
+
 
 /**
- * Types for onboarding router
+ * Onboarding Router
  */
 export type OnboardingParamList = {
-    [OnboardingRoutes.STEP1]: undefined;
-    [OnboardingRoutes.STEP2]: { days: number[] };
+    "STEP1": undefined;
+    "STEP2": { days: number[] };
 }
-export type OnboardingNavigationProp = CompositeNavigationProp<
-    NativeStackNavigationProp<OnboardingParamList>,
-    MainNavigationProp
->;
+export type OnboardingRoutes = keyof OnboardingParamList;
+
 
 /**
- * Types for home router
+ * Home Tabs Router
  */
 export type HomeParamList = {
-    [HomeRoutes.HOME]: undefined;
-    [HomeRoutes.AVATAR]: undefined;
-    [HomeRoutes.ROUTINES]: undefined;
-    [HomeRoutes.PROFILE]: undefined;
+    "HOME": undefined;
+    "AVATAR": undefined;
+    "ROUTINES": undefined;
+    "PROFILE": undefined;
 };
-export type HomeNavigationProp = CompositeNavigationProp<
-    BottomTabNavigationProp<HomeParamList>,
-    MainNavigationProp
->;
+export type HomeRoutes = keyof HomeParamList;
+
 
 declare global {
     namespace ReactNavigation {

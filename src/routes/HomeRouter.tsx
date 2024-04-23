@@ -9,24 +9,18 @@ import { TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import RoutineModal from "../components/home/routines/RoutineModal";
 import AssignRoutinesModal from "../components/home/routines/AssignRoutinesModal";
+import { HomeParamList, HomeRoutes } from "./types";
 
-export enum HomeRoutes {
-    HOME = "Home",
-    AVATAR = "Avatar",
-    ROUTINES = "Routines",
-    PROFILE = "Profile"
-}
-const Tab = createBottomTabNavigator();
-
-const tabBarIcon = (route: string, focused: boolean, size: number) => {
+const Tab = createBottomTabNavigator<HomeParamList>();
+const tabBarIcon = (route: HomeRoutes, focused: boolean, size: number) => {
     let iconName: any;
-    if (route === HomeRoutes.HOME) {
+    if (route === "HOME") {
         iconName = focused ? 'home' : 'home-outline';
-    } else if (route === HomeRoutes.AVATAR) {
+    } else if (route === "AVATAR") {
         iconName = focused ? 'person' : 'person-outline';
-    } else if (route === HomeRoutes.ROUTINES) {
+    } else if (route === "ROUTINES") {
         iconName = focused ? 'barbell' : 'barbell-outline';
-    } else if (route === HomeRoutes.PROFILE) {
+    } else if (route === "PROFILE") {
         iconName = focused ? 'settings' : 'settings-outline';
     }
     if (focused)
@@ -41,7 +35,7 @@ export default function HomeRouter() {
 
     return (
         <Tab.Navigator
-            initialRouteName={HomeRoutes.HOME}
+            initialRouteName="HOME"
             screenOptions={({ route }) => ({
                 /* Tab bar config */
                 tabBarShowLabel: false,
@@ -52,10 +46,10 @@ export default function HomeRouter() {
                 tabBarBackground: () => <View style={{ backgroundColor: 'black', flexGrow: 1 }} />
             })}
         >
-            <Tab.Screen name={HomeRoutes.HOME} component={Home} />
-            <Tab.Screen name={HomeRoutes.AVATAR} component={Avatar} />
+            <Tab.Screen name="HOME" component={Home} />
+            <Tab.Screen name="AVATAR" component={Avatar} />
             <Tab.Screen
-                name={HomeRoutes.ROUTINES}
+                name="ROUTINES"
                 component={Routines}
                 options={{
                     headerRight: () => (
@@ -76,7 +70,7 @@ export default function HomeRouter() {
                     )
                 }}
             />
-            <Tab.Screen name={HomeRoutes.PROFILE} component={Profile} />
+            <Tab.Screen name="PROFILE" component={Profile} />
         </Tab.Navigator>
     )
 }

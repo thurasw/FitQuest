@@ -9,18 +9,9 @@ import { useUser } from "../firestore/user.api";
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
 import OnboardingRouter from "./OnboardingRouter";
+import { MainParamList } from "./types";
 
-export enum MainRoutes {
-    //UNAUTHENTICATED ROUTES
-    LANDING = "Landing",
-    LOGIN = "Login",
-    SIGNUP = "Signup",
-    //AUTHENTICATED ROUTES
-    ONBOARDING = "Onboarding",
-    HOME = "HomeRouter"
-}
-
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<MainParamList>();
 export default function MainRouter() {
 
     const { isAuthenticated, isInitializing } = useAuth();
@@ -39,22 +30,22 @@ export default function MainRouter() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={MainRoutes.LANDING} screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="LANDING" screenOptions={{ headerShown: false }}>
                 {
                     isAuthenticated ? (
                         setupComplete ? (
                             // Setup complete, proceed to home
-                            <Stack.Screen name={MainRoutes.HOME} component={HomeRouter} />
+                            <Stack.Screen name="MAIN" component={HomeRouter} />
                         ) : (
                             // Setup incomplete, proceed to onboarding
-                            <Stack.Screen name={MainRoutes.ONBOARDING} component={OnboardingRouter} />
+                            <Stack.Screen name="ONBOARDING" component={OnboardingRouter} />
                         )
                     ) : (
                         // Unauthenticated routes
                         <>
-                            <Stack.Screen name={MainRoutes.LANDING} component={Landing} />
-                            <Stack.Screen name={MainRoutes.LOGIN} component={Login} />
-                            <Stack.Screen name={MainRoutes.SIGNUP} component={Signup} />
+                            <Stack.Screen name="LANDING" component={Landing} />
+                            <Stack.Screen name="LOGIN" component={Login} />
+                            <Stack.Screen name="SIGNUP" component={Signup} />
                         </>
                     )
                 }

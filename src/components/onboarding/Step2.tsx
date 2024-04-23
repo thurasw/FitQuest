@@ -4,19 +4,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from "react";
 import FQButton from "../common/FQButton";
 import { OnboardingParamList } from "../../routes/types";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { editUser } from "../../firestore/user.api";
 import { useAuth } from "../../providers/AuthProvider";
 import { createRoutine } from "../../firestore/routine.api";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export default function Step2() {
+export default function Step2({ route }: NativeStackScreenProps<OnboardingParamList, 'STEP2'>) {
     const [ selectedTime, setSelectedTime ] = useState<Date>();
-
-    const route = useRoute<RouteProp<OnboardingParamList>>();
     const auth = useAuth();
 
     const goNext = async() => {
-        if (!auth.user || !route.params?.days) return;
+        if (!auth.user || !route.params.days) return;
         if (!selectedTime) {
             return Alert.alert('Please select a time');
         }

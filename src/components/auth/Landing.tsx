@@ -1,6 +1,5 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Text, View, useWindowDimensions } from "react-native";
-import { MainRoutes } from "../../routes/MainRouter";
 import Container from "../common/Container";
 import FQButton from "../common/FQButton";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
@@ -62,12 +61,12 @@ export default function Landing() {
     // Update the label before animation starts
     const goToLogin = () => {
         setTitleLabel('Sign in');
-        navigation.navigate(MainRoutes.LOGIN);
+        navigation.navigate("LOGIN");
     };
 
     const goToSignup = () => {
         setTitleLabel('Sign up');
-        navigation.navigate(MainRoutes.SIGNUP);
+        navigation.navigate("SIGNUP");
     };
 
     return (

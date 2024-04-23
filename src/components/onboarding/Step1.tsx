@@ -1,10 +1,7 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import { Fragment, useState } from "react";
 import Container from "../common/Container";
 import { useNavigation } from "@react-navigation/native";
-import { OnboardingRoutes } from "../../routes/OnboardingRouter";
-import { MainRoutes } from "../../routes/MainRouter";
 import FQButton from "../common/FQButton";
 
 export default function Step1() {
@@ -65,8 +62,8 @@ export default function Step1() {
         if (activeOption.value.length === 0) {
             return Alert.alert('Please select at least one day');
         }
-        navigation.navigate(MainRoutes.ONBOARDING, {
-            screen: OnboardingRoutes.STEP2,
+        navigation.navigate("ONBOARDING", {
+            screen: "STEP2",
             params: {
                 days: activeOption.value
             }
