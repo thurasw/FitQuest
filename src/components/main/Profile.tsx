@@ -1,15 +1,16 @@
+import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text } from "react-native";
 import FQButton from "../common/FQButton";
 import { useAuth } from "../../providers/AuthProvider";
-import Container from "../common/Container";
 
-export default function Home() {
+export default function Profile() {
 
     const auth = useAuth();
 
     return (
-        <Container>
-            <View style={{ marginTop: 20 }}>
+        <SafeAreaView>
+            <View>
+                <Text>Profile</Text>
                 <FQButton
                     className='bg-primary-900'
                     textProps={{
@@ -19,6 +20,6 @@ export default function Home() {
                     onPress={() => auth.signOut()}
                 />
             </View>
-        </Container>
+        </SafeAreaView>
     )
 };

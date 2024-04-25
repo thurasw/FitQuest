@@ -10,6 +10,10 @@ declare global {
             points: number;
             workoutDays: Record<number, FirebaseFirestoreTypes.DocumentReference<Routine> | null>;
             workoutTime: number;
+
+            streak: number;
+            streakStartDate: string | null;
+            streakNextDate: string | null;
         }
 
         interface Routine {
@@ -22,6 +26,16 @@ declare global {
             amount: string;
         }
         interface Set {
+            reps: number;
+        }
+
+        interface LogEntry {
+            date: FirebaseFirestoreTypes.Timestamp;
+            point_awarded: number;
+            routineName: string;
+        }
+        interface LogExercise {
+            name: string;
             reps: number;
         }
     }

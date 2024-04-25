@@ -16,10 +16,27 @@ const routineSchema = z.object({
             name: z.string().min(1),
             sets: z.array(z.object({
                 reps: z.coerce.number().min(1)
-            })),
+            })).min(1),
             amount: z.string()
         })
-    )
+    ).min(1)
+}).superRefine((arg, ctx) => {
+    // Ensure exercises names are unique
+    arg.exercises.forEach((exercise, idx, arr) => {
+        const foundIdx = arr.findIndex((e, i) => i !== idx && e.name === exercise.name);
+        if (foundIdx !== -1) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ['exercises', idx, 'name'],
+                message: 'Exercise names must be unique'
+            });
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ['exercises', foundIdx, 'name'],
+                message: 'Exercise names must be unique'
+            });
+        }
+    });
 });
 type RoutineDto = z.infer<typeof routineSchema>;
 
@@ -171,12 +188,14 @@ export default function RoutineModal({ show, onClose, routineId, routineToEdit }
             {/* Header */}
             <View className='flex flex-row items-center p-5 bg-neutral-100'>
                 {
-                    routineToEdit && (
+                    routineToEdit ? (
                         <TouchableOpacity
                             onPress={deleteWorkout}
                         >
                             <Text className='text-red-500'>Delete</Text>
                         </TouchableOpacity>
+                    ) : (
+                        <Text className='invisible'>Cancel</Text>
                     )
                 }
                 <Text className='font-semibold text-xl text-center ms-auto'>
@@ -251,7 +270,7 @@ export default function RoutineModal({ show, onClose, routineId, routineToEdit }
                                 <View className='flex flex-row gap-3 mt-3'>
                                     <FQButton
                                         label='Add Set'
-                                        className='flex-grow py-1 border-primary-700'
+                                        className='flex-grow py-1'
                                         textProps={{
                                             className: 'text-primary-700'
                                         }}
@@ -261,7 +280,7 @@ export default function RoutineModal({ show, onClose, routineId, routineToEdit }
                                         idx !== 0 && (
                                             <FQButton
                                                 label='Remove Exercise'
-                                                className='flex-grow py-1 border-red-500'
+                                                className='flex-grow py-1'
                                                 textProps={{
                                                     className: 'text-red-500'
                                                 }}

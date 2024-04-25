@@ -70,7 +70,10 @@ export default function Signup() {
                     5: null,
                     6: null
                 },
-                workoutTime: 0
+                workoutTime: 0,
+                streak: 0,
+                streakStartDate: null,
+                streakNextDate: null
             })
         })
         .catch((err) => {

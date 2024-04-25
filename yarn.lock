@@ -1602,6 +1602,11 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
+"@freakycoder/react-native-bounceable@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@freakycoder/react-native-bounceable/-/react-native-bounceable-1.0.3.tgz#79de6fa99fb8357a5e52cc095ecdb1786f4b1514"
+  integrity sha512-+iMq2tnqxCwFjitbPUz9nZ+VfJ8OU9waIlDJAAsoq1229QEwCmERCNy5zVtDsz75q3i4FLXX/n7fimdMzmP21A==
+
 "@gar/promisify@^1.0.1":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -2881,9 +2886,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001587:
-  version "1.0.30001588"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001588.tgz#07f16b65a7f95dba82377096923947fb25bce6e3"
-  integrity sha512-+hVY9jE44uKLkH0SrUTqxjxqNTOWHsbnQDIKjwkZ3lNTzUUVdBLBGXtj/q5Mp5u98r3droaZAewQuEDzjQdZlQ==
+  version "1.0.30001612"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001612.tgz"
+  integrity sha512-lFgnZ07UhaCcsSZgWW0K5j4e69dK1u/ltrL9lTUiFOwNHs12S3UMIEYgBV0Z6C6hRDev7iRnMzzYmKabYdXF9g==
 
 chalk@^2.0.1, chalk@^2.4.2:
   version "2.4.2"
@@ -5937,6 +5942,13 @@ react-is@^17.0.1:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-native-bouncy-checkbox@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-bouncy-checkbox/-/react-native-bouncy-checkbox-4.0.0.tgz#bffa706d1a70eb6211c5997d29ceef61cda3e4a8"
+  integrity sha512-U/V4PEBiTYSZlVKdbA7B1plIFo0/zSs0IRYq7nFh5ONI+zCYyDVfYLU/k4CCh5+zhV6Pm0ZgvZ/6GYya8A9avw==
+  dependencies:
+    "@freakycoder/react-native-bounceable" "^1.0.3"
 
 react-native-css-interop@0.0.36:
   version "0.0.36"

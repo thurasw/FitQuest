@@ -1,4 +1,4 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { useFirestoreDocument } from './useFirestore';
 import { useAuth } from '../providers/AuthProvider';
 
@@ -26,6 +26,6 @@ export const useUser = () => {
 export const createUser = (uid: string, data: FitQuest.User) => {
     return getUserDocument(uid).set(data);
 }
-export const editUser = (uid: string, data: Partial<FitQuest.User>) => {
+export const editUser = (uid: string, data: Parameters<FirebaseFirestoreTypes.DocumentReference['update']>[1]) => {
     return getUserDocument(uid).update(data);
 }

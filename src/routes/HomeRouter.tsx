@@ -1,14 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../components/home/Home";
-import Avatar from "../components/home/Avatar";
-import Routines from "../components/home/routines/Routines";
-import Profile from "../components/home/Profile";
+import Home from "../components/main/home/Home";
+import Avatar from "../components/main/Avatar";
+import Routines from "../components/main/routines/Routines";
+import Profile from "../components/main/Profile";
 import { Ionicons } from '@expo/vector-icons';
 import { GradientIcon } from "../components/common/PrimaryGradient";
 import { TouchableOpacity, View } from "react-native";
 import { useState } from "react";
-import RoutineModal from "../components/home/routines/RoutineModal";
-import AssignRoutinesModal from "../components/home/routines/AssignRoutinesModal";
+import RoutineModal from "../components/main/routines/RoutineModal";
+import AssignRoutinesModal from "../components/main/routines/AssignRoutinesModal";
 import { HomeParamList, HomeRoutes } from "./types";
 
 const Tab = createBottomTabNavigator<HomeParamList>();

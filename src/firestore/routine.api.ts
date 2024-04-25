@@ -1,5 +1,5 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { useFirestoreCollection } from './useFirestore';
+import { useFirestoreCollection, useFirestoreDocument } from './useFirestore';
 import { useAuth } from '../providers/AuthProvider';
 import { getUserDocument } from './user.api';
 
@@ -23,6 +23,14 @@ export const useRoutines = () => {
     const collection = user ? getRoutineCollection(user.uid) : null;
     
     return useFirestoreCollection(collection);
+}
+
+export const useRoutine = (routineId: string) => {
+    const { user } = useAuth();
+    const doc = user ? getRoutineDocument(user.uid, routineId) : null;
+    
+    return useFirestoreDocument(doc);
+
 }
 
 /**

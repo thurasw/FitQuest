@@ -1,6 +1,6 @@
 import { Modal, Text, View } from "react-native";
 import { editUser, useUser } from "../../../firestore/user.api";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo } from "react";
 import { useRoutines } from "../../../firestore/routine.api";
 import RNPickerSelect from 'react-native-picker-select';
 import { useAuth } from "../../../providers/AuthProvider";
@@ -37,10 +37,7 @@ export default function AssignRoutinesModal({ show, onClose } : AssignRoutinesMo
     const handleAssignment = async(dayIdx: number, routineId: string) => {
         // Assign routine to day
         await editUser(user!.uid, {
-            workoutDays: {
-                ...userData!.workoutDays,
-                [dayIdx]: routines!.docs.find((doc) => doc.id === routineId)?.ref ?? null
-            }
+            [`workoutDays.${dayIdx}`]: routines!.docs.find((doc) => doc.id === routineId)?.ref ?? null
         });
     }
 
