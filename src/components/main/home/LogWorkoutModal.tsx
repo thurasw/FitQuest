@@ -1,4 +1,4 @@
-import { Modal, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { Modal, ScrollView, Text, View } from "react-native";
 import { useRoutines } from "../../../firestore/routine.api";
 import { useEffect, useState } from "react";
 import FQButton from "../../common/FQButton";
@@ -6,10 +6,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import firestore from '@react-native-firebase/firestore';
-import { calculatePointsToAward, createLogEntry } from "../../../firestore/log.api";
+import { createLogEntry } from "../../../firestore/log.api";
 import { useAuth } from "../../../providers/AuthProvider";
-import Animated, { useSharedValue, withDelay, withSequence, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { BounceIn, FadeInDown, ZoomOutUp, runOnJS } from "react-native-reanimated";
 import { useUser } from "../../../firestore/user.api";
+import { calculatePointsToAward } from "../../../utils/points.utils";
 
 interface LogWorkoutModalProps {
     show: boolean;
@@ -56,32 +57,21 @@ export default function LogWorkoutModal({ show, onClose, routineId, routine }: L
             routineName: selectedRoutine.name
         };
         // Log workout
-        // await createLogEntry(user!.uid, logEntry, selectedExercises);
+        createLogEntry(user!.uid, logEntry, selectedExercises, userData);
+
         // Show points awarded
         setShowPoints(true);
         setPointsToAward(points);
-        
-        //Initial position for the points description
-        pointsDescTransform.value = points.map(() => -50);
-
-        topPosition.value = withSpring(-height, undefined, () => {
-            pointsScale.value = withSpring(1, undefined, () => {
-                pointsDescTransform.value = points.map((_, idx) => withDelay(idx * 500, withSpring(0)));
-            });
-        });
     };
 
-    // Animation states
-    const { height } = useWindowDimensions();
-    const topPosition = useSharedValue(0);
-    const pointsScale = useSharedValue(0);
-    const pointsDescTransform = useSharedValue<number[]>([]);
+    const closeWithDelay = () => {
+        setTimeout(() => {
+            onClose();
+        }, 2000);
+    }
 
     useEffect(() => {
-        // Animation states
-        topPosition.value = 0;
-        pointsScale.value = 0;
-        pointsDescTransform.value = [];
+        // Reset
         setShowPoints(false);
         setPointsToAward([]);
     }, [ show ])
@@ -96,47 +86,59 @@ export default function LogWorkoutModal({ show, onClose, routineId, routine }: L
         >
             <View className='flex flex-col flex-grow'>
                 {/* HEADER */}
-                <View>
-                    <Text className='text-center mt-5 text-xl font-semibold'>
-                        { selectedRoutine.name }
-                    </Text>
+                <View className='flex flex-row items-center px-5 mt-5'>
+                    { !showPoints && <Text className='invisible'>Cancel</Text> }
+                    <View className='mx-auto'>
+                        <Text className='text-center text-xl font-semibold'>
+                            { selectedRoutine.name }
+                        </Text>
+                        {
+                            !showPoints && (
+                                <RNPickerSelect
+                                    style={{
+                                        iconContainer: {
+                                            right: -18,
+                                            top: 2
+                                        },
+                                        inputIOS: { color: '#1A9EFF', textAlign: 'center' },
+                                        inputAndroid: { color: '#1A9EFF', textAlign: 'center' },
+                                        inputWeb: { color: '#1A9EFF', textAlign: 'center' }
+                                    }}
+                                    placeholder={{}}
+                                    items={
+                                        routines?.docs.map((doc) => ({
+                                            label: doc.data().name,
+                                            value: doc.id,
+                                            key: doc.id,
+                                            inputLabel: 'Log another routine?'
+                                        })) ?? []
+                                    }
+                                    itemKey={selectedRoutine.id}
+                                    onValueChange={(value, idx) => {
+                                        setSelectedRoutine({
+                                            id: value,
+                                            ...routines!.docs[idx].data()
+                                        });
+                                    }}
+                                />
+                            )
+                        }
+                    </View>
                     {
                         !showPoints && (
-                            <RNPickerSelect
-                                style={{
-                                    iconContainer: {
-                                        right: -18,
-                                        top: 2
-                                    },
-                                    inputIOS: { color: '#1A9EFF', textAlign: 'center' },
-                                    inputAndroid: { color: '#1A9EFF', textAlign: 'center' },
-                                    inputWeb: { color: '#1A9EFF', textAlign: 'center' }
-                                }}
-                                Icon={() => <Ionicons name="chevron-down" size={15} color='#94a3b8' />}
-                                placeholder={{}}
-                                items={
-                                    routines?.docs.map((doc) => ({
-                                        label: doc.data().name,
-                                        value: doc.id,
-                                        key: doc.id,
-                                        inputLabel: 'Log another routine?'
-                                    })) ?? []
-                                }
-                                itemKey={selectedRoutine.id}
-                                onValueChange={(value, idx) => {
-                                    setSelectedRoutine({
-                                        id: value,
-                                        ...routines!.docs[idx].data()
-                                    });
-                                }}
+                            <FQButton
+                                className='px-0 py-0'
+                                textProps={{ className: 'text-primary-500' }}
+                                onPress={onClose}
+                                label='Cancel'
                             />
                         )
                     }
                 </View>
                 {/* LOG EXERCISES */}
                 {
-                    topPosition.value !== -height && (
-                        <Animated.View className='p-5 flex-1 flex-grow' style={{ top: topPosition }}>
+                    !showPoints && (
+                        <Animated.View className='p-5 flex-1 flex-grow' exiting={ZoomOutUp.duration(500)}>
                             <Text className='text-xl font-semibold my-5'>
                                 Select exercises to log
                             </Text>
@@ -227,15 +229,15 @@ export default function LogWorkoutModal({ show, onClose, routineId, routine }: L
                 {
                     showPoints && (
                         <Animated.View
-                            style={{
-                                transform: [{ scale: pointsScale }]
-                            }}
+                            entering={BounceIn.delay(1500)}
                             className='p-5 flex-grow flex flex-col justify-start items-center top-[15%] absolute w-full'
                         >
-                            <Text className='text-center text-8xl font-extrabold mt-5'>
-                                2000
-                            </Text>
-                            <Text className='text-center text-xl font-semibold'>
+                            <View className='bg-slate-200 rounded-xl px-10 py-5'>
+                                <Text className='text-primary-900 text-center text-8xl font-extrabold mt-5'>
+                                    { pointsToAward.reduce((acc, award) => acc + award.points, 0)}
+                                </Text>
+                            </View>
+                            <Text className='text-primary-900 mt-3 text-center text-xl font-semibold'>
                                 points earned!
                             </Text>
                             <View className='mt-12'>
@@ -244,9 +246,16 @@ export default function LogWorkoutModal({ show, onClose, routineId, routine }: L
                                         <Animated.Text
                                             key={idx}
                                             className='text-start text-slate-600 text-lg mt-2'
-                                            style={{
-                                                transform: [{ translateY: pointsDescTransform.value[idx] }],
-                                            }}
+                                            entering={
+                                                FadeInDown
+                                                .delay(2500 + (idx * 500))
+                                                .duration(500)
+                                                .withCallback(() => {
+                                                    if (idx === pointsToAward.length - 1) {
+                                                        runOnJS(closeWithDelay)();
+                                                    }
+                                                })
+                                            }
                                         >
                                             +{award.points}pts  ({ award.message })
                                         </Animated.Text>

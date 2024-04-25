@@ -22,15 +22,30 @@ export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTy
     return { snapshot, data, error };
 }
 
-export const useFirestoreCollection = <T extends {}>(collection: FirebaseFirestoreTypes.CollectionReference<T> | null) => {
+export type QueryFn<T extends {}> = (ref: FirebaseFirestoreTypes.CollectionReference<T>) => FirebaseFirestoreTypes.Query<T> | FirebaseFirestoreTypes.CollectionReference<T>;
+export const useFirestoreCollection = <T extends {}>(
+    collection: FirebaseFirestoreTypes.CollectionReference<T> | null,
+    query?: QueryFn<T>
+) => {
+    const [ currentCollection, setCurrentCollection ] = useState(
+        query ? collection ? query(collection) : collection : collection
+    );
+
+    if (collection) {
+        const ref = query ? query(collection) : collection;
+        if (!currentCollection || !ref.isEqual(currentCollection)) {
+            setCurrentCollection(ref);
+        }
+    }
+
     const [ snapshot, setSnapshot ] = useState<FirebaseFirestoreTypes.QuerySnapshot<T>>();
     const [ data, setData ] = useState<T[]>();
     const [ error, setError ] = useState<Error>();
 
     useEffect(() => {
-        if (!collection) return;
+        if (!currentCollection) return;
 
-        const unsub = collection.onSnapshot(
+        const unsub = currentCollection.onSnapshot(
             (snapshot) => {
                 setSnapshot(snapshot)
                 setData(snapshot.docs.map((doc) => doc.data()))
@@ -38,7 +53,7 @@ export const useFirestoreCollection = <T extends {}>(collection: FirebaseFiresto
             setError
         );
         return unsub;
-    }, [ collection?.path ]);
+    }, [ currentCollection ]);
 
     return { snapshot, data, error };
 }

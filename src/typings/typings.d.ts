@@ -18,6 +18,7 @@ declare global {
 
         interface Routine {
             name: string;
+            isDefault: boolean;
             exercises: Exercise[];
         }
         interface Exercise {

@@ -1,7 +1,8 @@
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { useFirestoreCollection } from './useFirestore';
+import firestore, { FirebaseFirestoreTypes }from '@react-native-firebase/firestore';
+import { QueryFn, useFirestoreCollection } from './useFirestore';
 import { useAuth } from '../providers/AuthProvider';
 import { getUserDocument } from './user.api';
+import { calculateStreakNextDate } from '../utils/points.utils';
 
 /**
  * Helper functions for doc/collection references
@@ -23,11 +24,11 @@ export const getLogExerciseCollection = (uid: string, logEntryId: string) => {
 /**
  * Hook for live updates
  */
-export const useLogEntries = () => {
+export const useLogEntries = (query?: QueryFn<FitQuest.LogEntry>) => {
     const { user } = useAuth();
     const collection = user ? getLogCollection(user.uid) : null;
     
-    return useFirestoreCollection(collection);
+    return useFirestoreCollection(collection, query);
 }
 export const useLogExercises = (logEntryId: string) => {
     const { user } = useAuth();
@@ -40,7 +41,12 @@ export const useLogExercises = (logEntryId: string) => {
 /**
  * CRUD operations
  */
-export const createLogEntry = (uid: string, entry: FitQuest.LogEntry, exercises: FitQuest.LogExercise[]) => {
+export const createLogEntry = (
+    uid: string,
+    entry: FitQuest.LogEntry,
+    exercises: FitQuest.LogExercise[],
+    user: FitQuest.User
+) => {
     // Create new batch instance
     const batch = getUserDocument(uid).firestore.batch();
     
@@ -53,54 +59,27 @@ export const createLogEntry = (uid: string, entry: FitQuest.LogEntry, exercises:
         const exerciseRef = getLogExerciseCollection(uid, logEntriesRef.id).doc();
         batch.set(exerciseRef, exercise);
     });
+
+    /**
+     * Update user details
+     */
+    const userRef = getUserDocument(uid);
+    const userObj = {
+        points: firestore.FieldValue.increment(entry.point_awarded),
+        streakNextDate: calculateStreakNextDate(user),
+        streakStartDate: user.streakStartDate
+    } as any;
+    
+    // If streak has been broken OR streak has not started yet
+    const today = new Date().toISOString().split('T')[0];
+
+    if (user.streakNextDate === today) {
+        userObj.streak = firestore.FieldValue.increment(1);
+    }
+    if (user.streakNextDate !== today || !user.streakStartDate) {
+        userObj.streakStartDate = today;
+        userObj.streak = 1;
+    }
+    batch.update(userRef, userObj);
     return batch.commit();
-}
-
-export const calculatePointsToAward = (user: FitQuest.User, percent_completed: number) => {
-    // Calculate points to award
-    const pointsTOAward : Array<{ points: number; message: string; }> = [];
-    if (percent_completed === 100) {
-        pointsTOAward.push({
-            points: 100,
-            message: 'Full workout completion'
-        });
-    }
-    else {
-        pointsTOAward.push({
-            points: 80,
-            message: 'Partial workout completion'
-        });
-    }
-
-    //Streak bonuses
-    const streakPeriod = !user.streakStartDate ? 0 : new Date().getTime() - new Date(user.streakStartDate).getTime();
-    const streakPeriodInDays = Math.floor(streakPeriod / (1000 * 60 * 60 * 24));
-
-    if (user.streakNextDate === new Date().toISOString().split('T')[0]) {
-        pointsTOAward.push({
-            points: 50,
-            message: 'Streak bonus'
-        });
-    }
-    if (streakPeriodInDays === 0) {
-        pointsTOAward.push({
-            points: 10,
-            message: 'Starting streak bonus'
-        });
-    }
-    else if (streakPeriodInDays % 30 === 0) {
-        const bonus = streakPeriodInDays / 30;
-        pointsTOAward.push({
-            points: 2000 * bonus,
-            message: bonus === 1 ? '30-day streak bonus' : `${bonus}-month streak bonus`
-        });
-    }
-    else if (streakPeriodInDays % 7 === 0) {
-        const bonus = streakPeriodInDays / 7;
-        pointsTOAward.push({
-            points: 500 * bonus,
-            message: bonus === 1 ? '7-day streak bonus' : `${bonus}-week streak bonus`
-        });
-    }
-    return pointsTOAward;
 }

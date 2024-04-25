@@ -6,6 +6,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { useAuth } from "../../../providers/AuthProvider";
 import { Ionicons } from '@expo/vector-icons';
 import FQButton from "../../common/FQButton";
+import { calculateStreakNextDate } from "../../../utils/points.utils";
 
 interface AssignRoutinesModalProps {
     show: boolean;
@@ -36,8 +37,12 @@ export default function AssignRoutinesModal({ show, onClose } : AssignRoutinesMo
 
     const handleAssignment = async(dayIdx: number, routineId: string) => {
         // Assign routine to day
+        const newValue = routines!.docs.find((doc) => doc.id === routineId)?.ref ?? null;
+        const newStreakDate = userData?.streakNextDate ? calculateStreakNextDate(userData!) : null;
+
         await editUser(user!.uid, {
-            [`workoutDays.${dayIdx}`]: routines!.docs.find((doc) => doc.id === routineId)?.ref ?? null
+            [`workoutDays.${dayIdx}`]: newValue,
+            streakNextDate: newStreakDate
         });
     }
 

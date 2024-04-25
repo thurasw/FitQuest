@@ -29,7 +29,7 @@
     "nativewind": "^4.0.1",
     "react": "18.2.0",
     "react-hook-form": "^7.50.1",
-    "react-native": "0.73.4",
+    "react-native": "0.73.6",
     "react-native-bouncy-checkbox": "^4.0.0",
     "react-native-gesture-handler": "^2.15.0",
     "react-native-picker-select": "^9.1.3",

@@ -26,6 +26,9 @@ export const useUser = () => {
 export const createUser = (uid: string, data: FitQuest.User) => {
     return getUserDocument(uid).set(data);
 }
-export const editUser = (uid: string, data: Parameters<FirebaseFirestoreTypes.DocumentReference['update']>[1]) => {
+export const editUser = (
+    uid: string,
+    data: Partial<{ [K in keyof FitQuest.User]: FitQuest.User[K] | FirebaseFirestoreTypes.FieldValue }>
+) => {
     return getUserDocument(uid).update(data);
 }

@@ -1,5 +1,5 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { useFirestoreCollection, useFirestoreDocument } from './useFirestore';
+import { QueryFn, useFirestoreCollection, useFirestoreDocument } from './useFirestore';
 import { useAuth } from '../providers/AuthProvider';
 import { getUserDocument } from './user.api';
 
@@ -18,11 +18,11 @@ export const getRoutineDocument = (uid: string, routineId: string) => {
 /**
  * Hook for live updates
  */
-export const useRoutines = () => {
+export const useRoutines = (query?: QueryFn<FitQuest.Routine>) => {
     const { user } = useAuth();
-    const collection = user ? getRoutineCollection(user.uid) : null;
+    let collection = getRoutineCollection(user?.uid || '');
     
-    return useFirestoreCollection(collection);
+    return useFirestoreCollection(user ? collection : null, query);
 }
 
 export const useRoutine = (routineId: string) => {

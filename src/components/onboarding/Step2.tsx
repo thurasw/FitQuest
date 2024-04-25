@@ -23,6 +23,7 @@ export default function Step2({ route }: NativeStackScreenProps<OnboardingParamL
             // Create default routine
             const result = await createRoutine(auth.user.uid, {
                 name: 'Default Routine',
+                isDefault: true,
                 exercises: [{
                     name: 'Cardio',
                     amount: '15min',

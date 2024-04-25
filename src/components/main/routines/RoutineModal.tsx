@@ -144,7 +144,10 @@ export default function RoutineModal({ show, onClose, routineId, routineToEdit }
     /** Form submission */
     const createWorkout = async(data: RoutineDto) => {
         try {
-            await createRoutine(user?.uid!, data);
+            await createRoutine(user?.uid!, {
+                ...data,
+                isDefault: false
+            });
             onClose();
         }
         catch(err) {
@@ -188,7 +191,7 @@ export default function RoutineModal({ show, onClose, routineId, routineToEdit }
             {/* Header */}
             <View className='flex flex-row items-center p-5 bg-neutral-100'>
                 {
-                    routineToEdit ? (
+                    (routineToEdit && !routineToEdit.isDefault) ? (
                         <TouchableOpacity
                             onPress={deleteWorkout}
                         >

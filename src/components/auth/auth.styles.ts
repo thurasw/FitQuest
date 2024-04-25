@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import stylesheet from "../../stylesheet";
 
 export default StyleSheet.create({
     titlePill: {
@@ -8,7 +7,7 @@ export default StyleSheet.create({
         paddingLeft: 30,
         paddingRight: 60,
         paddingVertical: 10,
-        backgroundColor: stylesheet.colors.primary,
+        backgroundColor: '#663dff',
         borderRadius: 50,
         alignSelf: 'flex-start'
     },
