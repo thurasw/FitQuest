@@ -10,6 +10,10 @@ const USER_COLLECTION = 'users';
 export const getUserCollection = () => firestore().collection<FitQuest.User>(USER_COLLECTION);
 export const getUserDocument = (uid: string) => getUserCollection().doc(uid);
 
+export const isSetupComplete = (user?: FitQuest.User) => {
+    return user !== undefined && user.workoutTime !== 0 && user.rpm.id !== null && user.rpm.token !== null && user.rpm.avatarId !== null && user.rpm.assets !== null && user.rpm.gender !== null;
+}
+
 /**
  * Hook for live updates
  */
@@ -28,7 +32,7 @@ export const createUser = (uid: string, data: FitQuest.User) => {
 }
 export const editUser = (
     uid: string,
-    data: Partial<{ [K in keyof FitQuest.User]: FitQuest.User[K] | FirebaseFirestoreTypes.FieldValue }>
+    data: Record<string, any>
 ) => {
     return getUserDocument(uid).update(data);
 }

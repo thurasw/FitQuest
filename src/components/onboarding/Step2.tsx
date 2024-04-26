@@ -4,66 +4,34 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from "react";
 import FQButton from "../common/FQButton";
 import { OnboardingParamList } from "../../routes/types";
-import { editUser } from "../../firestore/user.api";
-import { useAuth } from "../../providers/AuthProvider";
-import { createRoutine } from "../../firestore/routine.api";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Step2({ route }: NativeStackScreenProps<OnboardingParamList, 'STEP2'>) {
     const [ selectedTime, setSelectedTime ] = useState<Date>();
-    const auth = useAuth();
+    const navigation = useNavigation();
 
     const goNext = async() => {
-        if (!auth.user || !route.params.days) return;
         if (!selectedTime) {
             return Alert.alert('Please select a time');
         }
 
-        try {
-            // Create default routine
-            const result = await createRoutine(auth.user.uid, {
-                name: 'Default Routine',
-                isDefault: true,
-                exercises: [{
-                    name: 'Cardio',
-                    amount: '15min',
-                    sets: [{ reps: 1 }]
-                }, {
-                    name: 'Pushups',
-                    amount: '',
-                    sets: [{ reps: 10 }, { reps: 10 }, { reps: 10 }, { reps: 10 }, { reps: 10 }]
-                }]
-            });
-
-            const days = route.params?.days || [];
-            const workoutDays : FitQuest.User['workoutDays'] = {
-                0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null
-            };
-            for (const day of days) {
-                workoutDays[day] = result;
+        navigation.navigate("ONBOARDING", {
+            screen: "STEP3",
+            params: {
+                days: route.params.days,
+                time: selectedTime.valueOf()
             }
-
-            await editUser(auth.user.uid, {
-                workoutDays,
-                workoutTime: selectedTime.valueOf()
-            });
-        }
-        catch (error) {
-            console.error(error);
-            return Alert.alert('An error occurred');
-        }
+        });
     };
 
     return (
-        <Container statusBarPadding style={styles.ctn}>
-            <Text>What time would you like to receive your workout reminders?</Text>
+        <Container statusBarPadding className='flex flex-col flex-1'>
+            <Text className='mt-5 mb-10 text-3xl font-bold'>When should we send your workout reminders?</Text>
 
             <DateTimePicker
                 mode='time'
                 display='spinner'
-                style={{
-                    marginTop: 50,
-                }}
                 value={selectedTime || new Date()}
                 onChange={(event, selectedDate) => {
                     setSelectedTime(selectedDate);
@@ -72,19 +40,13 @@ export default function Step2({ route }: NativeStackScreenProps<OnboardingParamL
 
             <FQButton
                 label='Next'
-                className='bg-primary-900'
+                className='bg-primary-900 mt-auto mb-10'
                 textProps={{
                     className: 'text-white text-xl font-semibold'
                 }}
+                disabled={!selectedTime}
                 onPress={goNext}
             />
         </Container>
     )
 }
-
-const styles = StyleSheet.create({
-    ctn: {
-        flexDirection: 'column',
-        alignItems: 'stretch'
-    }
-});

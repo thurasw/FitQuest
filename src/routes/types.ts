@@ -19,6 +19,7 @@ export type MainRoutes = keyof MainParamList;
 export type OnboardingParamList = {
     "STEP1": undefined;
     "STEP2": { days: number[] };
+    "STEP3": { days: number[]; time: number; };
 }
 export type OnboardingRoutes = keyof OnboardingParamList;
 

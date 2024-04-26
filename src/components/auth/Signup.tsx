@@ -73,7 +73,14 @@ export default function Signup() {
                 workoutTime: 0,
                 streak: 0,
                 streakStartDate: null,
-                streakNextDate: null
+                streakNextDate: null,
+                rpm: {
+                    id: null,
+                    token: null,
+                    avatarId: null,
+                    assets: null,
+                    gender: null
+                }
             })
         })
         .catch((err) => {
@@ -123,7 +130,7 @@ export default function Signup() {
                     placeholder='First Name'
                     autoComplete='given-name'
                     enterKeyHint='next'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 <FormInput
                     control={control}
@@ -131,7 +138,7 @@ export default function Signup() {
                     placeholder='Last Name'
                     autoComplete='family-name'
                     enterKeyHint='next'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 
                 <FormInput
@@ -142,7 +149,7 @@ export default function Signup() {
                     keyboardType='email-address'
                     autoCapitalize='none'
                     enterKeyHint='next'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 <FormInput
                     control={control}
@@ -151,7 +158,7 @@ export default function Signup() {
                     autoComplete='new-password'
                     secureTextEntry
                     enterKeyHint='next'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 <FormInput
                     control={control}
@@ -160,7 +167,7 @@ export default function Signup() {
                     autoComplete='new-password'
                     secureTextEntry
                     enterKeyHint='next'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
 
                 <FormInput
@@ -169,7 +176,7 @@ export default function Signup() {
                     placeholder='Date of Birth'
                     autoComplete='birthdate-full'
                     enterKeyHint='send'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 
                 {/* Submit button */}

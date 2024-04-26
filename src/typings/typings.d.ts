@@ -14,6 +14,14 @@ declare global {
             streak: number;
             streakStartDate: string | null;
             streakNextDate: string | null;
+
+            rpm: {
+                id: string | null;
+                token: string | null;
+                avatarId: string | null;
+                gender: 'male' | 'female' | null;
+                assets: {} | null;
+            };
         }
 
         interface Routine {

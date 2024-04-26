@@ -5,7 +5,7 @@ import Signup from "../components/auth/Signup";
 import Landing from "../components/auth/Landing";
 import { useAuth } from "../providers/AuthProvider";
 import HomeRouter from "./HomeRouter";
-import { useUser } from "../firestore/user.api";
+import { isSetupComplete, useUser } from "../firestore/user.api";
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
 import OnboardingRouter from "./OnboardingRouter";
@@ -17,7 +17,7 @@ export default function MainRouter() {
     const { isAuthenticated, isInitializing } = useAuth();
     const { data: user } = useUser();
 
-    const setupComplete = user !== undefined && user.workoutTime !== 0;
+    const setupComplete = isSetupComplete(user);
 
     const appIsReady = !isInitializing && (!isAuthenticated || user !== undefined);
     useEffect(() => {

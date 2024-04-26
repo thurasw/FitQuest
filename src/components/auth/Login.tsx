@@ -85,7 +85,7 @@ export default function Login() {
                     keyboardType='email-address'
                     enterKeyHint='next'
                     autoCapitalize='none'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 <FormInput
                     control={control}
@@ -95,7 +95,7 @@ export default function Login() {
                     autoComplete='current-password'
                     blurOnSubmit={true}
                     enterKeyHint='send'
-                    className='bg-neutral-800 text-white'
+                    className='bg-neutral-800 text-black'
                 />
                 <FQButton
                     label='Sign in'

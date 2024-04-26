@@ -1,8 +1,8 @@
-import { Text, StyleSheet, TouchableOpacity, View, Alert } from "react-native";
+import { Text, StyleSheet, View, Alert } from "react-native";
 import { Fragment, useState } from "react";
 import Container from "../common/Container";
-import { useNavigation } from "@react-navigation/native";
 import FQButton from "../common/FQButton";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Step1() {
 
@@ -72,17 +72,18 @@ export default function Step1() {
 
     return (
         <Container statusBarPadding>
-            <Text>How many times a week do you work out?</Text>
+            <Text className='text-3xl mt-5 mb-10 font-bold'>How many times a week do you work out?</Text>
 
-            <View style={{ gap: 10, marginTop: 50 }}>
+            <View style={{ gap: 10 }}>
                 {
                     options.map(option => (
                         <Fragment key={option.label}>
                             <FQButton
-                                className={activeOption.label === option.label ? 'bg-primary-900' : 'border-primary-900'}
+                                className={activeOption.label === option.label ? 'bg-primary-900 border-transparent' : 'border-primary-900 bg-transparent'}
                                 textProps={{
                                     className: activeOption.label === option.label ? 'text-white' : 'text-primary-900'
                                 }}
+                                style={{ borderWidth: 2 }}
                                 label={option.label}
                                 onPress={() => setActiveOption(option)}
                             />
@@ -93,11 +94,11 @@ export default function Step1() {
                                             customOptions.map((day, index) => (
                                                 <FQButton
                                                     key={index}
-                                                    className={activeOption.value.includes(day.value) ? 'bg-primary-900' : 'border-primary-900'}
+                                                    className={activeOption.value.includes(day.value) ? 'bg-primary-900 border-transparent' : 'border-primary-900 bg-transparent'}
                                                     textProps={{
                                                         className: activeOption.value.includes(day.value) ? 'text-white' : 'text-primary-900'
                                                     }}
-                                                    style={{ paddingHorizontal: 10, paddingVertical: 10 }}
+                                                    style={{ paddingHorizontal: 10, paddingVertical: 10, borderWidth: 2 }}
                                                     label={day.label}
                                                     onPress={() => {
                                                         setActiveOption(p => {
@@ -132,6 +133,7 @@ export default function Step1() {
                 style={[styles.nextButton]}
                 label='Next'
                 onPress={goNext}
+                disabled={activeOption.value.length === 0}
             />
         </Container>
     )

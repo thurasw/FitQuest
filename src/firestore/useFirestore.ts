@@ -22,9 +22,9 @@ export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTy
     return { snapshot, data, error };
 }
 
-export type QueryFn<T extends {}> = (ref: FirebaseFirestoreTypes.CollectionReference<T>) => FirebaseFirestoreTypes.Query<T> | FirebaseFirestoreTypes.CollectionReference<T>;
+export type QueryFn<T extends {}> = (ref: FirebaseFirestoreTypes.CollectionReference<T> | FirebaseFirestoreTypes.Query<T>) => typeof ref;
 export const useFirestoreCollection = <T extends {}>(
-    collection: FirebaseFirestoreTypes.CollectionReference<T> | null,
+    collection: FirebaseFirestoreTypes.CollectionReference<T> | FirebaseFirestoreTypes.Query<T> | null,
     query?: QueryFn<T>
 ) => {
     const [ currentCollection, setCurrentCollection ] = useState(

@@ -15,7 +15,7 @@ export default function Home() {
 
     return (
         <Container>
-            <View className='p-5'>
+            <View className='p-5 flex flex-col gap-5'>
                 <LogWorkoutCard />
             </View>
         </Container>
