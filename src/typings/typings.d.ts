@@ -1,4 +1,5 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { AssetType } from "../api/variables.api";
 
 declare global {
     namespace FitQuest {
@@ -8,6 +9,7 @@ declare global {
             lastName: string;
             level: number;
             points: number;
+            lifetimePoints: number;
             workoutDays: Record<number, FirebaseFirestoreTypes.DocumentReference<Routine> | null>;
             workoutTime: number;
 
@@ -18,9 +20,10 @@ declare global {
             rpm: {
                 id: string | null;
                 token: string | null;
+                templateId: string | null;
                 avatarId: string | null;
                 gender: 'male' | 'female' | null;
-                assets: {} | null;
+                assets: Record<string, string> | null;
             };
         }
 
@@ -46,6 +49,11 @@ declare global {
         interface LogExercise {
             name: string;
             reps: number;
+        }
+
+        interface UnlockedAsset {
+            type: AssetType;
+            id: string;
         }
     }
 }

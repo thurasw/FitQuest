@@ -20,10 +20,13 @@ export default function FQButton({ label, textProps, Gradient, ...props } : FQBu
         <TouchableOpacity
             activeOpacity={0.8}
             {...props}
-            style={StyleSheet.compose(Gradient !== undefined ? {} : styles.container, props.style)}
+            style={StyleSheet.compose(
+                Gradient !== undefined ? [] : [styles.container, { opacity: props.disabled ? 0.5: undefined }],
+                props.style
+            )}
         >
             { Gradient !== undefined ? (
-                <Gradient style={styles.container}>
+                <Gradient style={[styles.container, { opacity: props.disabled ? 0.5 : 1 }]}>
                     {content}
                 </Gradient>
             ) : content }

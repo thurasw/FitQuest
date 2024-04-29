@@ -20,17 +20,16 @@ export const getRoutineDocument = (uid: string, routineId: string) => {
  */
 export const useRoutines = (query?: QueryFn<FitQuest.Routine>) => {
     const { user } = useAuth();
-    let collection = getRoutineCollection(user?.uid || '');
+    let collection = user ? getRoutineCollection(user.uid) : null;
     
-    return useFirestoreCollection(user ? collection : null, query);
+    return useFirestoreCollection(collection, query);
 }
 
-export const useRoutine = (routineId: string) => {
+export const useRoutine = (routineId: string | null) => {
     const { user } = useAuth();
-    const doc = user ? getRoutineDocument(user.uid, routineId) : null;
+    const doc = (user && routineId) ? getRoutineDocument(user.uid, routineId) : null;
     
     return useFirestoreDocument(doc);
-
 }
 
 /**

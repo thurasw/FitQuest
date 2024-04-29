@@ -61,6 +61,7 @@ export default function Signup() {
                 ...data,
                 level: 1,
                 points: 0,
+                lifetimePoints: 0,
                 workoutDays: {
                     0: null,
                     1: null,
@@ -79,7 +80,8 @@ export default function Signup() {
                     token: null,
                     avatarId: null,
                     assets: null,
-                    gender: null
+                    gender: null,
+                    templateId: null
                 }
             })
         })

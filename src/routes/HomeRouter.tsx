@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../components/main/home/Home";
-import Avatar from "../components/main/Avatar";
+import Avatar from "../components/main/avatar/Avatar";
 import Routines from "../components/main/routines/Routines";
 import Profile from "../components/main/Profile";
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,8 @@ import { useState } from "react";
 import RoutineModal from "../components/main/routines/RoutineModal";
 import AssignRoutinesModal from "../components/main/routines/AssignRoutinesModal";
 import { HomeParamList, HomeRoutes } from "./types";
+import { useUser } from "../firestore/user.api";
+import HomeHeader from "../components/main/home/HomeHeader";
 
 const Tab = createBottomTabNavigator<HomeParamList>();
 const tabBarIcon = (route: HomeRoutes, focused: boolean, size: number) => {
@@ -33,6 +35,8 @@ export default function HomeRouter() {
     const [ showCreateRoutine, setShowCreateRoutine ] = useState(false);
     const [ showAssignRoutine, setShowAssignRoutine ] = useState(false);
 
+    const { data: userData } = useUser();
+
     return (
         <Tab.Navigator
             initialRouteName="HOME"
@@ -43,7 +47,8 @@ export default function HomeRouter() {
                     borderTopColor: 'black'
                 },
                 tabBarIcon: ({ focused, size }) => tabBarIcon(route.name, focused, size),
-                tabBarBackground: () => <View style={{ backgroundColor: 'black', flexGrow: 1 }} />
+                tabBarBackground: () => <View style={{ backgroundColor: 'black', flexGrow: 1 }} />,
+                header: () => userData ? <HomeHeader user={userData} /> : <></>
             })}
         >
             <Tab.Screen name="HOME" component={Home} />
@@ -52,6 +57,7 @@ export default function HomeRouter() {
                 name="ROUTINES"
                 component={Routines}
                 options={{
+                    header: undefined,
                     headerRight: () => (
                         <>
                             <TouchableOpacity className='me-5' onPress={() => setShowCreateRoutine(true)}>

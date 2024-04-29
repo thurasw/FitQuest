@@ -11,7 +11,7 @@ export const getUserCollection = () => firestore().collection<FitQuest.User>(USE
 export const getUserDocument = (uid: string) => getUserCollection().doc(uid);
 
 export const isSetupComplete = (user?: FitQuest.User) => {
-    return user !== undefined && user.workoutTime !== 0 && user.rpm.id !== null && user.rpm.token !== null && user.rpm.avatarId !== null && user.rpm.assets !== null && user.rpm.gender !== null;
+    return user !== undefined && user.workoutTime !== 0 && user.rpm.id !== null && user.rpm.token !== null && user.rpm.avatarId !== null && user.rpm.assets !== null && user.rpm.gender !== null && user.rpm.templateId !== null;
 }
 
 /**

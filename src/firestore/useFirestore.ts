@@ -14,7 +14,10 @@ export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTy
                 setSnapshot(doc);
                 setData(doc.data())
             },
-            setError
+            (err) => {
+                setError(err);
+                console.error(err);
+            }
         );
         return unsub;
     }, [ document?.path ]);
@@ -50,7 +53,10 @@ export const useFirestoreCollection = <T extends {}>(
                 setSnapshot(snapshot)
                 setData(snapshot.docs.map((doc) => doc.data()))
             },
-            setError
+            (err) => {
+                setError(err);
+                console.error(err);
+            }
         );
         return unsub;
     }, [ currentCollection ]);

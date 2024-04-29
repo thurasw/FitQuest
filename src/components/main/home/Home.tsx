@@ -47,7 +47,7 @@ function LogWorkoutCard() {
         return entries?.some((v) => v.date.toDate().toISOString().split('T')[0] === today) === true;
     }, [ entries ])
 
-    const { snapshot: routineSnapshot, data: routine } = useRoutine(scheduledWorkout?.id || '');
+    const { snapshot: routineSnapshot, data: routine } = useRoutine(scheduledWorkout?.id || null);
 
     // Modal states
     const [ showLog, setShowLog ] = useState(false);

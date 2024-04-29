@@ -66,6 +66,7 @@ export const createLogEntry = (
     const userRef = getUserDocument(uid);
     const userObj = {
         points: firestore.FieldValue.increment(entry.point_awarded),
+        lifetimePoints: firestore.FieldValue.increment(entry.point_awarded),
         streakNextDate: calculateStreakNextDate(user),
         streakStartDate: user.streakStartDate
     } as any;

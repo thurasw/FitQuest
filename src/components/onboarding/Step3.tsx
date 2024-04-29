@@ -77,7 +77,8 @@ export default function Step3({ route }: NativeStackScreenProps<OnboardingParamL
                 workoutTime: route.params.time,
                 'rpm.avatarId': res.data.id,
                 'rpm.assets': res.data.assets,
-                'rpm.gender': res.data.gender
+                'rpm.gender': res.data.gender,
+                'rpm.templateId': selectedTemplate
             });
         }
         catch (error) {

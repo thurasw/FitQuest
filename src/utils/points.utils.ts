@@ -66,3 +66,53 @@ export const calculateStreakNextDate = ({ workoutDays } : { workoutDays: FitQues
 
     return date.toISOString().split('T')[0];
 }
+
+/**
+ * Calculate the user's current level based on their lifetime points
+ * 1-999: Level 1
+ * 1000-2499: Level 2
+ * 2500-4999: Level 3
+ * 5000-7499: Level 4
+ * 7500-12499: Level 5
+ * 12500-17499: Level 6
+ * 17500-24999: Level 7
+ * 25000-34999: Level 8
+ * 35000-49999: Level 9
+ * 50000+: Level 10
+ */
+const levelPoints = [
+    0, 1000, 2500, 5000, 7500, 12500, 17500, 25000, 35000, 50000
+];
+export const getCurrentLevel = (lifetimePoints: number) => {
+    for (let i = 0; i < levelPoints.length; i++) {
+        if (lifetimePoints < levelPoints[i]) {
+            return i;
+        }
+    }
+    return levelPoints.length;
+}
+
+export const getRequiredPoints = (lifetimePoints: number) => {
+    const currentLevel = getCurrentLevel(lifetimePoints);
+    return levelPoints[currentLevel] - lifetimePoints;
+}
+
+export const getLevelProgress = (lifetimePoints: number) => {
+    const currentLevel = getCurrentLevel(lifetimePoints);
+    const nextLevelPoints = levelPoints[currentLevel];
+    const prevLevelPoints = levelPoints[currentLevel - 1] || 0;
+    return (lifetimePoints - prevLevelPoints) / (nextLevelPoints - prevLevelPoints);
+}
+
+export const getLevelImage = (level: number) => {
+    if (level <= 1) return require('../../assets/badges/level-1.png');
+    if (level === 2) return require('../../assets/badges/level-2.png');
+    if (level === 3) return require('../../assets/badges/level-3.png');
+    if (level === 4) return require('../../assets/badges/level-4.png');
+    if (level === 5) return require('../../assets/badges/level-5.png');
+    if (level === 6) return require('../../assets/badges/level-6.png');
+    if (level === 7) return require('../../assets/badges/level-7.png');
+    if (level === 8) return require('../../assets/badges/level-8.png');
+    if (level === 9) return require('../../assets/badges/level-9.png');
+    return require('../../assets/badges/level-10.png');
+}

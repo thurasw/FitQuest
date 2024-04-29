@@ -1,4 +1,4 @@
-import { Modal, Text, View } from "react-native";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 import { editUser, useUser } from "../../../firestore/user.api";
 import { Fragment, useMemo } from "react";
 import { useRoutines } from "../../../firestore/routine.api";
@@ -54,6 +54,7 @@ export default function AssignRoutinesModal({ show, onClose } : AssignRoutinesMo
             animationType='fade'
         >
             <View className='w-full h-full bg-black/75 flex items-center justify-center'>
+                <TouchableOpacity activeOpacity={1} className='w-full h-full absolute' onPress={onClose} />
                 <View className='bg-white rounded-lg px-5 pt-8 pb-4 self-stretch mx-10 flex flex-col gap-4'>
                     {
                         assignments?.map((as, idx) => (

@@ -712,8 +712,13 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - ExpoDevice (5.9.4):
+    - ExpoModulesCore
   - ExpoFileSystem (16.0.6):
     - ExpoModulesCore
+  - ExpoGL (13.6.0):
+    - ExpoModulesCore
+    - ReactCommon/turbomodule/core
   - ExpoKeepAwake (12.8.2):
     - ExpoModulesCore
   - ExpoLinearGradient (12.7.2):
@@ -1952,7 +1957,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSVG (15.2.0):
+  - RNSVG (14.1.0):
     - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
@@ -1969,7 +1974,9 @@ DEPENDENCIES:
   - expo-dev-launcher (from `../node_modules/expo-dev-launcher`)
   - expo-dev-menu (from `../node_modules/expo-dev-menu`)
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
+  - ExpoDevice (from `../node_modules/expo-device/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
+  - ExpoGL (from `../node_modules/expo-gl`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
@@ -2084,8 +2091,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-dev-menu"
   expo-dev-menu-interface:
     :path: "../node_modules/expo-dev-menu-interface/ios"
+  ExpoDevice:
+    :path: "../node_modules/expo-device/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
+  ExpoGL:
+    :path: "../node_modules/expo-gl"
   ExpoKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoLinearGradient:
@@ -2226,7 +2237,9 @@ SPEC CHECKSUMS:
   expo-dev-launcher: 2bac74e8ff8c38950529b812075086ef571317ce
   expo-dev-menu: 1b221587615ce11b37a64da5520e9a639496571b
   expo-dev-menu-interface: 7ba029c9d1a82ac22b9b584c00514860b060553e
+  ExpoDevice: 97307196d8cab694e245752b8a7afacc35c14e03
   ExpoFileSystem: a9273932e69a9a1e1a8d01b6ba895bb8294bbea2
+  ExpoGL: 085542f97b13f2428ac2edb077c9a90f4566944d
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoLinearGradient: 4ad1449a2408e0435ac959076562b3921f2e32a1
   ExpoModulesCore: e3935209adc73469033e62992a504077def5bd40
@@ -2306,7 +2319,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 2e3251b41d462552997c61afd680220d019fea65
   RNReanimated: 41963a348e738c496a9b129bba9a9217017cd530
   RNScreens: a4d9ce8f68f833f4e42410140eafd88e38bba163
-  RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
+  RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 

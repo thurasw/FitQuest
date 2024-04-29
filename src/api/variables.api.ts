@@ -5,3 +5,14 @@ export const RPMConfig = {
     API_BASE: 'https://api.readyplayer.me',
     SUBDOMAIN_BASE: 'https://fitquest.readyplayer.me',
 }
+
+export type AssetType = 
+| 'eye'
+| 'eyebrows'
+| 'beard'
+| 'hair'
+| 'glasses'
+// | 'facemask'
+| 'headwear'
+// | 'top'
+| 'shirt';
