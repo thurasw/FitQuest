@@ -9,6 +9,8 @@ import { createRoutine } from "../../firestore/routine.api";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAvatarTemplates } from "../../api/endpoints.api";
 import { createRpmAvatar, createRpmUser } from "../../api/mutations.api";
+import firestore from "@react-native-firebase/firestore";
+import { createUnlockedAsset } from "../../firestore/unlocked-assets.api";
 
 export default function Step3({ route }: NativeStackScreenProps<OnboardingParamList, 'STEP3'>) {
 
@@ -47,6 +49,14 @@ export default function Step3({ route }: NativeStackScreenProps<OnboardingParamL
             setIsLoading(true);
             const res = await createRpmAvatar(userData!.rpm.token, selectedTemplate!);
 
+            for (let type in res.data.assets) {
+                // Unlock chosen assets
+                const id = res.data.assets[type] as string;
+                if (id) {
+                    createUnlockedAsset(auth.user.uid, { id, type });
+                }
+            }
+
             // Create default routine
             const result = await createRoutine(auth.user.uid, {
                 name: 'Default Routine',
@@ -78,7 +88,13 @@ export default function Step3({ route }: NativeStackScreenProps<OnboardingParamL
                 'rpm.avatarId': res.data.id,
                 'rpm.assets': res.data.assets,
                 'rpm.gender': res.data.gender,
-                'rpm.templateId': selectedTemplate
+                'rpm.templateId': selectedTemplate,
+                avatars: [{
+                    avatarId: res.data.id,
+                    assets: res.data.assets,
+                    gender: res.data.gender,
+                    templateId: selectedTemplate
+                }]
             });
         }
         catch (error) {
@@ -152,7 +168,7 @@ interface TemplateImageProps {
     onPress: () => void;
     isSelected: boolean;
 }
-function TemplateImage({ imageUrl, onPress, isSelected }: TemplateImageProps) {
+export function TemplateImage({ imageUrl, onPress, isSelected }: TemplateImageProps) {
 
     const [autoHeight, setAutoHeight] = useState(0);
 

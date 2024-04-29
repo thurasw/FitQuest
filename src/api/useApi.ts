@@ -58,6 +58,7 @@ export async function fetchFromRpm<T>(endpoint: APIFetcher, parseJson?: boolean)
         signal: endpoint.signal
     });
     if (!response.ok) {
+        console.error(response.status, response.statusText);
         throw new Error(response.statusText);
     }
     if (parseJson !== false) {

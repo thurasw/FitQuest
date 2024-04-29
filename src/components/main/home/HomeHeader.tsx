@@ -70,7 +70,7 @@ function LevelInfoModal({ show, onClose, user }: LevelInfoModalProps) {
         >
             <View className='w-full h-full bg-black/75 flex items-center justify-center'>
                 <TouchableOpacity className='absolute h-full w-full' onPressOut={onClose} />
-                <View className='bg-white rounded-lg px-5 py-8 self-stretch mx-10 flex flex-col gap-4'>
+                <View className='bg-white rounded-lg p-8 self-stretch mx-10 flex flex-col gap-4'>
                     {/* Badge */}
                     <View className='flex flex-row items-center justify-center px-10'>
                         <BadgeImage

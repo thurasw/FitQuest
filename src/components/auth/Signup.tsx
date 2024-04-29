@@ -82,7 +82,8 @@ export default function Signup() {
                     assets: null,
                     gender: null,
                     templateId: null
-                }
+                },
+                avatars: []
             })
         })
         .catch((err) => {

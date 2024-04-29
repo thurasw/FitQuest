@@ -52,6 +52,10 @@ export const useAvatarAssets = (
 export const getAvatarPreviewUrl = (avatarId: string) => {
     return `https://api.readyplayer.me/v2/avatars/${avatarId}.glb?preview=true&useHands=false&textureAtlas=512`;
 }
-export const getAvatarModel = (avatarId: string) => {
-    return `https://models.readyplayer.me/${avatarId}.glb?useHands=false&textureAtlas=512`;
+export const get2DAvatarModel = (avatarId: string, updatedAt?: string) => {
+    let url = `https://models.readyplayer.me/${avatarId}.png?useHands=false&textureAtlas=512`;
+    if (updatedAt) {
+        url += `&uat=${updatedAt}&cacheControl=true`;
+    }
+    return url;
 }

@@ -25,6 +25,13 @@ declare global {
                 gender: 'male' | 'female' | null;
                 assets: Record<string, string> | null;
             };
+
+            avatars: {
+                avatarId: string;
+                templateId: string;
+                gender: 'male' | 'female';
+                assets: Record<string, string>;
+            }[];
         }
 
         interface Routine {
@@ -52,7 +59,7 @@ declare global {
         }
 
         interface UnlockedAsset {
-            type: AssetType;
+            type: string;
             id: string;
         }
     }

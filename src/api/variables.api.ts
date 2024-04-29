@@ -16,3 +16,13 @@ export type AssetType =
 | 'headwear'
 // | 'top'
 | 'shirt';
+
+export const AssetTypeMapping = {
+    eye: 'eyeColor',
+    eyebrows: 'eyebrowStyle',
+    beard: 'beardStyle',
+    hair: 'hairStyle',
+    glasses: 'glasses',
+    headwear: 'headwear',
+    shirt: 'shirt'
+} as Record<AssetType, string>;

@@ -3,7 +3,7 @@ import FQButton from "../../common/FQButton";
 import { getAvatarPreviewUrl, useAvatarAssets } from "../../../api/endpoints.api";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { editUser, useUser } from "../../../firestore/user.api";
-import { AssetType } from "../../../api/variables.api";
+import { AssetType, AssetTypeMapping } from "../../../api/variables.api";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import IconEyebrow from '../../../../assets/vectors/eyebrow.svg';
@@ -18,8 +18,15 @@ import { useAuth } from "../../../providers/AuthProvider";
 interface AvatarEditorModalProps {
     show: boolean;
     onClose: () => void;
+
+    avatarToEdit: {
+        avatarId: string;
+        templateId: string;
+        gender: 'male' | 'female';
+        assets: Record<string, string | number>;
+    };
 }
-export default function AvatarEditorModal({ show, onClose } : AvatarEditorModalProps) {
+export default function AvatarEditorModal({ show, onClose, avatarToEdit } : AvatarEditorModalProps) {
     return (
         <Modal
             visible={show}
@@ -28,13 +35,17 @@ export default function AvatarEditorModal({ show, onClose } : AvatarEditorModalP
             presentationStyle='pageSheet'
         >
             <View className='flex flex-col mt-auto mb-10 flex-1'>
-                <AvatarEditor onCancel={onClose} />
+                <AvatarEditor onCancel={onClose} avatarToEdit={avatarToEdit} />
             </View>
         </Modal>
     )
 }
 
-function AvatarEditor({ onCancel } : { onCancel: () => void }) {
+interface AvatarEditorProps {
+    onCancel: () => void;
+    avatarToEdit: AvatarEditorModalProps['avatarToEdit'];
+}
+function AvatarEditor({ onCancel, avatarToEdit } : AvatarEditorProps) {
     const { user } = useAuth();
     const { data: userData } = useUser();
     const [ selectedType, setSelectedType ] = useState<AssetType>('eye');
@@ -45,31 +56,22 @@ function AvatarEditor({ onCancel } : { onCancel: () => void }) {
         beard: IconBeard,
         hair: IconHair,
         glasses: [MaterialCommunityIcons, 'glasses'],
-        // facemask: [MaterialCommunityIcons,'face-mask'],
         headwear: [MaterialCommunityIcons, 'head'],
-        // top: [MaterialCommunityIcons, 'tshirt-crew'],
         shirt: [MaterialCommunityIcons, 'tshirt-crew']
     } as const;
 
-    const AssetTypeMapping = {
-        eye: 'eyeColor',
-        eyebrows: 'eyebrowStyle',
-        beard: 'beardStyle',
-        hair: 'hairStyle'
-    } as Record<AssetType, string>;
-
     // Fetch assets data
-    const { data } = useAvatarAssets(selectedType, userData?.rpm?.gender!, undefined, {
-        enabled: !!userData?.rpm.gender
+    const { data } = useAvatarAssets(selectedType, avatarToEdit.gender, undefined, {
+        enabled: !!avatarToEdit.gender
     });
     const { data: unlockedAssets } = useUnlockedAssets((query) => {
-        return query.where('type', '==', selectedType);
+        return query.where('type', '==', AssetTypeMapping[selectedType] || selectedType);
     });
 
     // Set the current displayed avatar to the user's saved avatar
     const setAvatarToUser = async() => {
         if (!userData) return;
-        const newAvatar = await duplicateAvatar(userData.rpm.token!, userData.rpm.templateId!, userData.rpm.assets!);
+        const newAvatar = await duplicateAvatar(userData?.rpm.token!, avatarToEdit.templateId, avatarToEdit.assets);
         setAvatarId(newAvatar.id);
         setCurrentConfig(newAvatar.assets);
         setLockedPreview(undefined);
@@ -140,7 +142,7 @@ function AvatarEditor({ onCancel } : { onCancel: () => void }) {
     const revert = async() => {
         if (!avatarId) return;
         try {
-            const newConfig = await updateRpmAvatar(userData?.rpm.token!, avatarId, userData?.rpm.assets!);
+            const newConfig = await updateRpmAvatar(userData?.rpm.token!, avatarId, avatarToEdit.assets!);
             setCurrentConfig(newConfig.assets);
             setLockedPreview(undefined);
             setReloadCounter(r => r+1);
@@ -153,11 +155,22 @@ function AvatarEditor({ onCancel } : { onCancel: () => void }) {
 
     const handleSave = async() => {
         try {
-            await updateRpmAvatar(userData?.rpm.token!, userData?.rpm.avatarId!, currentConfig);
-            const res = await saveRpmAvatarChanges(userData?.rpm.token!, userData?.rpm.avatarId!);
-            await editUser(user!.uid, {
-                'rpm.assets': res.assets
-            });
+            if (!userData || !avatarId) return;
+            const res = await updateRpmAvatar(userData?.rpm.token!, avatarId, currentConfig);
+            const savedRes = await saveRpmAvatarChanges(userData?.rpm.token!, res.id);
+
+            const editData = {
+                avatars: userData.avatars.map(a => a.avatarId !== avatarToEdit.avatarId ? a : ({
+                    ...a,
+                    assets: savedRes.assets,
+                    avatarId: savedRes.id
+                }))
+            } as any;
+            if (userData.rpm.avatarId === avatarToEdit.avatarId) {
+                editData['rpm.assets'] = savedRes.assets;
+                editData['rpm.avatarId'] = savedRes.id;
+            }
+            await editUser(user!.uid, editData);
 
             Alert.alert('Success', 'Changes saved');
             onCancel();
@@ -193,8 +206,8 @@ function AvatarEditor({ onCancel } : { onCancel: () => void }) {
     }, [ data, unlockedAssets ]);
 
     const isChanged = useMemo(() => {
-        return Object.keys(currentConfig).some(k => currentConfig[k] !== userData?.rpm.assets?.[k]);
-    }, [ userData, currentConfig ])
+        return Object.keys(currentConfig).some(k => currentConfig[k] !== avatarToEdit.assets?.[k]);
+    }, [ avatarToEdit.assets, currentConfig ])
 
     return (
         <>
@@ -322,7 +335,7 @@ function AssetItem({ assetUrl, assetId, assetType, isUnlocked, handlePreview, ha
                 text: 'Unlock',
                 onPress: () => {
                     createUnlockedAsset(user!.uid, {
-                        type: assetType,
+                        type: AssetTypeMapping[assetType] || assetType,
                         id: assetId
                     })
                     .catch((err) => {
