@@ -15,9 +15,7 @@ export default function Avatar() {
     const { width } = useWindowDimensions();
 
     const [ selectedLevel, setSelectedLevel ] = useState(1);
-    const [ showEditor, setShowEditor ] = useState(false);
-
-    const [ reloadCount, setReloadCount ] = useState(0);
+    const [ showEditor, setShowEditor ] = useState(false);    
 
     if (!userData) return <></>;
     
@@ -55,7 +53,8 @@ export default function Avatar() {
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    decelerationRate={0}
+                    decelerationRate={0.9}
+                    disableIntervalMomentum
                     snapToInterval={cardWidth+10}
                     snapToAlignment='center'
                     contentInset={{
@@ -63,6 +62,10 @@ export default function Avatar() {
                         left: cardSpacing,
                         bottom: 0,
                         right: cardSpacing
+                    }}
+                    contentOffset={{
+                        x: -cardSpacing,
+                        y: 0
                     }}
                     contentContainerStyle={{
                         // `contentInset` alternative for android
@@ -121,10 +124,7 @@ export default function Avatar() {
                         />
                         <AvatarEditorModal
                             show={showEditor}
-                            onClose={() => {
-                                setShowEditor(false)
-                                setReloadCount(r => r + 1);
-                            }}
+                            onClose={() => setShowEditor(false)}
                             avatarToEdit={selectedAvatar}
                         />
                     </View>
@@ -198,7 +198,7 @@ function AvatarCard({ width, user, level, loadImage }: AvatarCardProps) {
     )
 }
 
-function AvatarImage({ url, height } : { url: string; height: number; }) {
+export function AvatarImage({ url, height } : { url: string; height: number; }) {
     const [ width, setWidth ] = useState(0);
     const [ isLoading, setIsLoading ] = useState(false);
 

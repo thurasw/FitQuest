@@ -131,19 +131,15 @@ interface BadgeImageProps {
     source: ImageSourcePropType;
     height: number;
 }
-function BadgeImage({ source, height } : BadgeImageProps) {
+export function BadgeImage({ source, height } : BadgeImageProps) {
 
-    const [ autoWidth, setAutoWidth ] = useState(0);
-
-    useEffect(() => {
-        const img = Image.resolveAssetSource(source);
-        setAutoWidth(height * img.width / img.height);
-    }, [ source ]);
+    const img = Image.resolveAssetSource(source);
+    const width = height * img.width / img.height;
 
     return (
         <Image
             source={source}
-            style={{ width: autoWidth, height }}
+            style={{ width, height }}
         />
     )
 }

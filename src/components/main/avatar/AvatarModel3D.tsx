@@ -1,5 +1,5 @@
-import { Suspense, useEffect, useState } from 'react';
-import { ActivityIndicator, Platform, Text } from 'react-native';
+import { Suspense } from 'react';
+import { ActivityIndicator, Text } from 'react-native';
 import { Canvas } from '@react-three/fiber/native';
 import { useGLTF } from '@react-three/drei/native';
 import * as Device from 'expo-device';

@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../components/main/home/Home";
 import Avatar from "../components/main/avatar/Avatar";
 import Routines from "../components/main/routines/Routines";
-import Profile from "../components/main/Profile";
+import Profile from "../components/main/profile/Profile";
 import { Ionicons } from '@expo/vector-icons';
 import { GradientIcon } from "../components/common/PrimaryGradient";
 import { TouchableOpacity, View } from "react-native";
