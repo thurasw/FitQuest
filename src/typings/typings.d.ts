@@ -4,7 +4,6 @@ import { AssetType } from "../api/variables.api";
 declare global {
     namespace FitQuest {
         interface User {
-            dateOfBirth: string;
             firstName: string;
             lastName: string;
             level: number;

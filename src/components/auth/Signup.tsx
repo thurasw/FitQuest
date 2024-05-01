@@ -19,7 +19,6 @@ const signupSchema = z.object({
     email: z.string().email().min(1),
     password: z.string().min(8),
     confirmPassword: z.string().min(8),
-    dateOfBirth: z.string().min(1)
 }).superRefine((arg, ctx) => {
     if (arg.password !== arg.confirmPassword) {
         ctx.addIssue({
@@ -48,8 +47,7 @@ export default function Signup() {
             lastName: '',
             email: '',
             password: '',
-            confirmPassword: '',
-            dateOfBirth: ''
+            confirmPassword: ''
         }
     });
 
@@ -170,15 +168,6 @@ export default function Signup() {
                     autoComplete='new-password'
                     secureTextEntry
                     enterKeyHint='next'
-                    className='bg-neutral-800 text-black'
-                />
-
-                <FormInput
-                    control={control}
-                    fieldName='dateOfBirth'
-                    placeholder='Date of Birth'
-                    autoComplete='birthdate-full'
-                    enterKeyHint='send'
                     className='bg-neutral-800 text-black'
                 />
                 

@@ -93,7 +93,7 @@ function LevelInfoModal({ show, onClose, user }: LevelInfoModalProps) {
                         <Text className='text-center font-extrabold text-3xl text-primary-900 mb-5'>
                             Level { level }
                         </Text>
-                        <View className='bg-slate-300 rounded-full h-3'>
+                        <View className='bg-slate-300 rounded-full' style={{ height: 8 }}>
                             <View
                                 className='bg-primary-900 rounded-full h-full'
                                 style={{ width: `${percent}%` }}

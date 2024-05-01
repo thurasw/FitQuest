@@ -1,17 +1,41 @@
 import { View, Text } from "react-native";
 import FQButton from "../../common/FQButton";
-import { useAuth } from "../../../providers/AuthProvider";
 import Container from "../../common/Container";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useUser } from "../../../firestore/user.api";
 import LogWorkoutModal from "./LogWorkoutModal";
 import { useRoutine, useRoutines } from "../../../firestore/routine.api";
 import { useLogEntries } from "../../../firestore/log.api";
 import firestore from "@react-native-firebase/firestore";
+import { registerRemindersAsync } from "../../../utils/reminders.utils";
 
 export default function Home() {
 
-    const auth = useAuth();
+    const { data: user } = useUser();
+    const currentReminderConfig = useRef<[number[], number, number]>();
+
+    useEffect(() => {
+        if (!user) return;
+
+        const daysToRemind = Object.entries(user.workoutDays)
+        .filter(([, v]) => v !== null)
+        .map(([k]) => parseInt(k));
+
+        const triggerTime = new Date(user.workoutTime);
+        const hours = triggerTime.getHours();
+        const minutes = triggerTime.getMinutes();
+
+        if (
+            currentReminderConfig.current === undefined ||
+            currentReminderConfig.current[0].length !== daysToRemind.length ||
+            !currentReminderConfig.current[0].every((v, i) => v === daysToRemind[i]) ||
+            currentReminderConfig.current[1] !== hours ||
+            currentReminderConfig.current[2] !== minutes
+        ) {
+            currentReminderConfig.current = [ daysToRemind, hours, minutes ];
+            registerRemindersAsync(daysToRemind, hours, minutes);
+        }
+    }, [ user ]);
 
     return (
         <Container>

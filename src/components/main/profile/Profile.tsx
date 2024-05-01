@@ -9,12 +9,17 @@ import { getCurrentLevel, getLevelImage, getLevelProgress, getRequiredPoints } f
 import { BadgeImage } from "../home/HomeHeader";
 import EditProfileModal from "./EditProfileModal";
 import { useState } from "react";
+import { Ionicons } from '@expo/vector-icons';
+import EditPasswordModal from "./EditPasswordModal";
+import AssignRoutinesModal from "../routines/AssignRoutinesModal";
 
 export default function Profile() {
 
     const auth = useAuth();
     const { data: user } = useUser();
     const [ editProfile, setEditProfile ] = useState(false);
+    const [ editPw, setEditPw ] = useState(false);
+    const [ assignModal, setAssignModal ] = useState(false);
 
     if (!user) return <></>;
 
@@ -42,9 +47,9 @@ export default function Profile() {
                     <Text className='text-center font-extrabold text-3xl text-primary-900 mb-5'>
                         Level { level }
                     </Text>
-                    <View className='bg-slate-300 rounded-full h-3'>
+                    <View className='bg-slate-300 rounded-xl' style={{ height: 8 }}>
                         <View
-                            className='bg-primary-900 rounded-full h-full'
+                            className='bg-primary-900 rounded-xl h-full'
                             style={{ width: `${percent}%` }}
                         />
                     </View>
@@ -72,25 +77,39 @@ export default function Profile() {
                 </View>
                 <View className='mb-10 mt-auto'>
                     <FQButton
-                        className='border-2 border-primary-900 rounded-xl px-4 py-3 mb-3'
-                        textProps={{
-                            className: 'text-primary-900'
-                        }}
-                        label='Edit Profile'
+                        className='bg-slate-300 rounded-xl px-4 py-3 mb-3 flex flex-row items-center gap-3'
+                        onPress={() => setAssignModal(true)}
+                    >
+                        <Ionicons name="calendar" size={20} color="black" />
+                        <Text>Workout Schedule</Text>
+                    </FQButton>
+                    <AssignRoutinesModal show={assignModal} onClose={() => setAssignModal(false)} />
+                    <FQButton
+                        className='bg-slate-300 rounded-xl px-4 py-3 mb-3 flex flex-row items-center gap-3'
                         onPress={() => setEditProfile(true)}
-                    />
+                    >
+                        <Ionicons name="pencil" size={20} color="black" />
+                        <Text>Edit Profile</Text>
+                    </FQButton>
                     <EditProfileModal
                         show={editProfile}
                         onClose={() => setEditProfile(false)}
                     />
                     <FQButton
-                        className='bg-primary-900 rounded-xl px-4 py-3 border-2 border-primary-900'
-                        textProps={{
-                            className: 'text-white'
-                        }}
-                        label='Log out'
+                        className='bg-slate-300 rounded-xl px-4 py-3 mb-3 flex flex-row items-center gap-3'
+                        onPress={() => setEditPw(true)}
+                    >
+                        <Ionicons name="key" size={20} color="black" />
+                        <Text>Update Password</Text>
+                    </FQButton>
+                    <EditPasswordModal show={editPw} onClose={() => setEditPw(false)} />
+                    <FQButton
+                        className='bg-slate-300 rounded-xl px-4 py-3 flex flex-row items-center gap-3'
                         onPress={() => auth.signOut()}
-                    />
+                    >
+                        <Ionicons name="log-out" size={20} color="black" />
+                        <Text>Sign Out</Text>
+                    </FQButton>
                 </View>
             </View>
         </Container>
