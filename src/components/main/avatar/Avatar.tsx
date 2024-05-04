@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Image, Platform, ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { ActivityIndicator, Alert, Image, ImageStyle, Platform, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import Container from "../../common/Container";
 import FQButton from "../../common/FQButton";
 import AvatarEditorModal from "./AvatarEditorModal";
@@ -198,7 +198,7 @@ function AvatarCard({ width, user, level, loadImage }: AvatarCardProps) {
     )
 }
 
-export function AvatarImage({ url, height } : { url: string; height: number; }) {
+export function AvatarImage({ url, height, style } : { url: string; height: number; style?: ImageStyle }) {
     const [ width, setWidth ] = useState(0);
     const [ isLoading, setIsLoading ] = useState(false);
 
@@ -218,6 +218,7 @@ export function AvatarImage({ url, height } : { url: string; height: number; }) 
         <Image
             onLoad={() => setIsLoading(false)}
             source={{ uri: url, width, height, cache: 'force-cache' }}
+            style={style}
         />
     )
 }

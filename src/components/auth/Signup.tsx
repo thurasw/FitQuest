@@ -57,7 +57,6 @@ export default function Signup() {
         .then((user) => {
             createUser(user.user.uid, {
                 ...data,
-                level: 1,
                 points: 0,
                 lifetimePoints: 0,
                 workoutDays: {
@@ -81,7 +80,9 @@ export default function Signup() {
                     gender: null,
                     templateId: null
                 },
-                avatars: []
+                avatars: [],
+                facebookId: null,
+                facebookToken: null
             })
         })
         .catch((err) => {

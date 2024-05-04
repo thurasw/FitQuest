@@ -6,7 +6,6 @@ declare global {
         interface User {
             firstName: string;
             lastName: string;
-            level: number;
             points: number;
             lifetimePoints: number;
             workoutDays: Record<number, FirebaseFirestoreTypes.DocumentReference<Routine> | null>;
@@ -31,6 +30,9 @@ declare global {
                 gender: 'male' | 'female';
                 assets: Record<string, string>;
             }[];
+
+            facebookId: string | null;
+            facebookToken: string | null;
         }
 
         interface Routine {

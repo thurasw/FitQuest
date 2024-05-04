@@ -53,7 +53,7 @@ export default function Step3({ route }: NativeStackScreenProps<OnboardingParamL
                 // Unlock chosen assets
                 const id = res.data.assets[type] as string;
                 if (id) {
-                    createUnlockedAsset(auth.user.uid, { id, type });
+                    createUnlockedAsset(auth.user.uid, { id, type }, false);
                 }
             }
 

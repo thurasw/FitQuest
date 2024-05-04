@@ -130,8 +130,9 @@ function LevelInfoModal({ show, onClose, user }: LevelInfoModalProps) {
 interface BadgeImageProps {
     source: ImageSourcePropType;
     height: number;
+    className?: string;
 }
-export function BadgeImage({ source, height } : BadgeImageProps) {
+export function BadgeImage({ source, height, className } : BadgeImageProps) {
 
     const img = Image.resolveAssetSource(source);
     const width = height * img.width / img.height;
@@ -140,6 +141,7 @@ export function BadgeImage({ source, height } : BadgeImageProps) {
         <Image
             source={source}
             style={{ width, height }}
+            className={className}
         />
     )
 }

@@ -1,5 +1,5 @@
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { useFirestoreDocument } from './useFirestore';
+import { QueryFn, useFirestoreCollection, useFirestoreDocument } from './useFirestore';
 import { useAuth } from '../providers/AuthProvider';
 
 /**
@@ -17,6 +17,9 @@ export const isSetupComplete = (user?: FitQuest.User) => {
 /**
  * Hook for live updates
  */
+export const useUsers = (query: QueryFn<FitQuest.User>) => {
+    return useFirestoreCollection(getUserCollection(), query);
+}
 export const useUser = () => {
     const { user } = useAuth();
     const document = user ? getUserDocument(user.uid) : null;

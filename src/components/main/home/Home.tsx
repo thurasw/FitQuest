@@ -8,6 +8,7 @@ import { useRoutine, useRoutines } from "../../../firestore/routine.api";
 import { useLogEntries } from "../../../firestore/log.api";
 import firestore from "@react-native-firebase/firestore";
 import { registerRemindersAsync } from "../../../utils/reminders.utils";
+import Leaderboards from "./Leaderboards";
 
 export default function Home() {
 
@@ -37,18 +38,20 @@ export default function Home() {
         }
     }, [ user ]);
 
+    if (!user) return <></>;
+
     return (
         <Container>
             <View className='p-5 flex flex-col gap-5'>
-                <LogWorkoutCard />
+                <LogWorkoutCard user={user} />
+                <Leaderboards user={user} />
             </View>
         </Container>
     )
 };
 
-function LogWorkoutCard() {
+function LogWorkoutCard({ user } : { user: FitQuest.User }) {
 
-    const { data: userData } = useUser();
     const { snapshot: routinesSnapshot } = useRoutines();
     const { data: entries } = useLogEntries((query) => {
         const startOfToday = new Date();
@@ -63,8 +66,8 @@ function LogWorkoutCard() {
 
     const scheduledWorkout = useMemo(() => {
         const day = new Date().getDay();
-        return userData?.workoutDays[day] || null;
-    }, [ userData ]);
+        return user.workoutDays[day] || null;
+    }, [ user ]);
 
     const isWorkoutLogged = useMemo(() => {
         const today = new Date().toISOString().split('T')[0];
@@ -84,7 +87,7 @@ function LogWorkoutCard() {
                         routine !== undefined && routineSnapshot !== undefined && (
                             <View>
                                 <View className='flex flex-row'>
-                                    <Text className='text-lg font-semibold'>{ routine.name }</Text>
+                                    <Text className='text-lg font-bold'>{ routine.name }</Text>
                                     <Text className='text-lg'> scheduled today</Text>
                                 </View>
                                 <Text className='text-slate-500'>Start your streak now to earn bonus points!</Text>
@@ -99,7 +102,7 @@ function LogWorkoutCard() {
                         )
                     ) : (
                         <View>
-                            <Text className='text-xl font-semibold'>No workout scheduled today</Text>
+                            <Text className='text-xl font-bold'>No workout scheduled today</Text>
                             <Text className='text-slate-500'>Feeling extra motivated? Log your workout anyways</Text>
 
                             <FQButton
@@ -112,7 +115,7 @@ function LogWorkoutCard() {
                     )
                 ) : (
                     <View>
-                        <Text className='text-xl font-semibold'>All done for today!</Text>
+                        <Text className='text-xl font-bold'>All done for today!</Text>
                         <Text className='text-slate-500'>We've already saved your workout entry</Text>
                     </View>
                 )

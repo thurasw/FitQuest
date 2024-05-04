@@ -4484,6 +4484,11 @@ expo-three@^7.0.0:
     "@expo/browser-polyfill" "^1.0.0"
     expo-asset-utils "~3.0.0"
 
+expo-tracking-transparency@~3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/expo-tracking-transparency/-/expo-tracking-transparency-3.3.0.tgz#1ac5294b9553b36a2ad6aeb4894a96aa93fde46b"
+  integrity sha512-aFeDm1Y/4N8CigCdDKQPCIzCMAHDIAhdpb8PopuH1Lz7jtq+K+D2OgAUJsgyI6pyKO/MqcXMsa0s/JkIzi593Q==
+
 expo-updates-interface@~0.15.1:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.15.3.tgz#cdee536dea0a8692833a4d074005bf9c6bbbdd99"

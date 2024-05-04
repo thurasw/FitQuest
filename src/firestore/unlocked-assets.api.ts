@@ -24,23 +24,24 @@ export const useUnlockedAssets = (query?: QueryFn<FitQuest.UnlockedAsset>) => {
 /**
  * CRUD operations
  */
-export const createUnlockedAsset = async(uid: string, data: FitQuest.UnlockedAsset) => {
+export const createUnlockedAsset = async(uid: string, data: FitQuest.UnlockedAsset, deductPoints = true) => {
     const user = getUserDocument(uid);
-    const points = (await user.get()).data()?.points;
-
-    if (points && points < 100) {
-        throw new Error('Insufficient points');
-    }
-
     const batch = user.firestore.batch();
+
+    if (deductPoints) {
+        const points = (await user.get()).data()?.points;
+        if (points !== undefined && points < 100) {
+            throw new Error('Insufficient points');
+        }
+
+        batch.update(user, {
+            points: firestore.FieldValue.increment(-100)
+        });
+    }
 
     // Create unlocked asset
     const ref = getUnlockedAssetsCollection(uid).doc();
     batch.set(ref, data);
-    
-    batch.update(user, {
-        points: firestore.FieldValue.increment(-100)
-    });
 
     await batch.commit();
 }

@@ -54,7 +54,8 @@
           "autoLogAppEventsEnabled": false,
           "isAutoInitEnabled": true
         }
-      ]
+      ],
+      "expo-tracking-transparency"
     ]
   }
 }
