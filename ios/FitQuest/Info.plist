@@ -52,7 +52,7 @@
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>FacebookAdvertiserIDCollectionEnabled</key>
-    <true/>
+    <false/>
     <key>FacebookAppID</key>
     <string>1505585406662631</string>
     <key>FacebookAutoInitEnabled</key>
@@ -80,7 +80,7 @@
       <true/>
     </dict>
     <key>NSUserTrackingUsageDescription</key>
-    <string>This identifier will be used to deliver personalized ads to you.</string>
+    <string>Allow this app to collect app-related data that can be used for tracking you or your device.</string>
     <key>SKAdNetworkItems</key>
     <array>
       <dict>

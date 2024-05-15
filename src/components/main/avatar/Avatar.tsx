@@ -2,7 +2,7 @@ import { ActivityIndicator, Alert, Image, ImageStyle, Platform, ScrollView, Text
 import Container from "../../common/Container";
 import FQButton from "../../common/FQButton";
 import AvatarEditorModal from "./AvatarEditorModal";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { editUser, useUser } from "../../../firestore/user.api";
 import { getCurrentLevel } from "../../../utils/points.utils";
 import { get2DAvatarModel } from "../../../api/endpoints.api";

@@ -80,9 +80,9 @@ export default function Leaderboards({ user } : { user: FitQuest.User }) {
                     user.facebookId === null ? (
                         <>
                             <LeaderboardItem user={user} />
-                            <FQButton className='bg-blue-900 mt-5 mx-5 flex flex-row items-center' onPress={connectFb}>
+                            <FQButton className='bg-blue-800 mt-5 mx-5 flex flex-row items-center' onPress={connectFb}>
                                 <Ionicons name="logo-facebook" size={24} color="white" />
-                                <Text className='text-white ms-2'>Connect to Facebook to find friends</Text>
+                                <Text className='text-white ms-3'>Connect to Facebook to find friends</Text>
                             </FQButton>
                         </>
                     ) : users !== undefined && (
