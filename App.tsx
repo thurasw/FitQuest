@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import "./index.css";
+import FirestoreProvider from './src/providers/FirestoreProvider';
 
 LogBox.ignoreAllLogs(true);
 
@@ -15,9 +16,11 @@ export default function App() {
 	return (
 		<SafeAreaProvider>
 			<AuthProvider>
-				<QueryClientProvider client={queryClient}>
-					<MainRouter></MainRouter>
-				</QueryClientProvider>
+				<FirestoreProvider>
+					<QueryClientProvider client={queryClient}>
+						<MainRouter></MainRouter>
+					</QueryClientProvider>
+				</FirestoreProvider>
 			</AuthProvider>
 		</SafeAreaProvider>
 	);

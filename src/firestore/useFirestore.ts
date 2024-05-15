@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { useFirestore } from "../providers/FirestoreProvider";
 
 export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTypes.DocumentReference<T> | null) => {
+    const { subscribeToDocument } = useFirestore();
+
     const [ snapshot, setSnapshot ] = useState<FirebaseFirestoreTypes.DocumentSnapshot<T>>();
     const [ data, setData ] = useState<T>();
     const [ error, setError ] = useState<Error>();
@@ -9,16 +12,14 @@ export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTy
     useEffect(() => {
         if (!document) return;
 
-        const unsub = document.onSnapshot(
-            (doc) => {
-                setSnapshot(doc);
-                setData(doc.data())
-            },
-            (err) => {
-                setError(err);
+        const unsub = subscribeToDocument(document, (err, snapshot) => {
+            if (err) {
                 console.error(err);
+                return setError(err);
             }
-        );
+            setSnapshot(snapshot);
+            setData(snapshot?.data());
+        });
         return unsub;
     }, [ document?.path ]);
 
@@ -45,19 +46,19 @@ export const useFirestoreCollection = <T extends {}>(
     const [ data, setData ] = useState<T[]>();
     const [ error, setError ] = useState<Error>();
 
+    const { subscribeToCollection } = useFirestore();
+
     useEffect(() => {
         if (!currentCollection) return;
 
-        const unsub = currentCollection.onSnapshot(
-            (snapshot) => {
-                setSnapshot(snapshot)
-                setData(snapshot.docs.map((doc) => doc.data()))
-            },
-            (err) => {
-                setError(err);
+        const unsub = subscribeToCollection(currentCollection, (err, snapshot) => {
+            if (err) {
                 console.error(err);
+                return setError(err);
             }
-        );
+            setSnapshot(snapshot);
+            setData(snapshot?.docs.map((doc) => doc.data()));
+        });
         return unsub;
     }, [ currentCollection ]);
 
