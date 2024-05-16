@@ -26,18 +26,21 @@ export const useFirestoreDocument = <T extends {}>(document: FirebaseFirestoreTy
     return { snapshot, data, error };
 }
 
-export type QueryFn<T extends {}> = (ref: FirebaseFirestoreTypes.CollectionReference<T> | FirebaseFirestoreTypes.Query<T>) => typeof ref;
+export type QueryFn<T extends {}> = (ref: FirebaseFirestoreTypes.CollectionReference<T> | FirebaseFirestoreTypes.Query<T>) => typeof ref | null;
 export const useFirestoreCollection = <T extends {}>(
     collection: FirebaseFirestoreTypes.CollectionReference<T> | FirebaseFirestoreTypes.Query<T> | null,
     query?: QueryFn<T>
 ) => {
     const [ currentCollection, setCurrentCollection ] = useState(
-        query ? collection ? query(collection) : collection : collection
+        collection ? (query?.(collection) || collection) : collection
     );
 
-    if (collection) {
+    if (currentCollection && (!collection || (query && !query(collection)))) {
+        setCurrentCollection(null);
+    }
+    else if (collection) {
         const ref = query ? query(collection) : collection;
-        if (!currentCollection || !ref.isEqual(currentCollection)) {
+        if (ref && (!currentCollection || !ref.isEqual(currentCollection))) {
             setCurrentCollection(ref);
         }
     }
@@ -49,11 +52,18 @@ export const useFirestoreCollection = <T extends {}>(
     const { subscribeToCollection } = useFirestore();
 
     useEffect(() => {
-        if (!currentCollection) return;
+        if (!currentCollection) {
+            setSnapshot(undefined);
+            setData(undefined);
+            setError(undefined);
+            return;
+        };
 
         const unsub = subscribeToCollection(currentCollection, (err, snapshot) => {
             if (err) {
                 console.error(err);
+                setSnapshot(snapshot);
+                setData(undefined);
                 return setError(err);
             }
             setSnapshot(snapshot);

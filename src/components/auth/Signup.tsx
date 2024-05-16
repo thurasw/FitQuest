@@ -57,7 +57,7 @@ export default function Signup() {
         .then((user) => {
             createUser(user.user.uid, {
                 ...data,
-                points: 0,
+                points: 500,
                 lifetimePoints: 0,
                 workoutDays: {
                     0: null,

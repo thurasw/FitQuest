@@ -79,6 +79,14 @@ function LogWorkoutCard({ user } : { user: FitQuest.User }) {
     // Modal states
     const [ showLog, setShowLog ] = useState(false);
 
+    const isStreakActive = (streakNextDate: string | null) => {
+        if (!streakNextDate) return false;
+        const nextDate = new Date(streakNextDate);
+        const today = new Date();
+
+        return nextDate.getDate() === today.getDate() && nextDate.getMonth() === today.getMonth() && nextDate.getFullYear() === today.getFullYear();
+    }
+
     return (
         <View className='p-5 bg-slate-200 rounded-lg'>
             {
@@ -90,7 +98,17 @@ function LogWorkoutCard({ user } : { user: FitQuest.User }) {
                                     <Text className='text-lg font-bold'>{ routine.name }</Text>
                                     <Text className='text-lg'> scheduled today</Text>
                                 </View>
-                                <Text className='text-slate-500'>Start your streak now to earn bonus points!</Text>
+                                {
+                                    !user.streak ? (
+                                        <Text className='text-slate-500'>Start a new streak now and earn bonus points!</Text>
+                                    ) : (
+                                        isStreakActive(user.streakNextDate) ? (
+                                            <Text className='text-slate-500'>Keep your {user.streak}-day streak alive! Log your workout now</Text>
+                                        ) : (
+                                            <Text className='text-slate-500'>You missed your streak! Keep going to start a new one</Text>
+                                        )
+                                    )
+                                }
     
                                 <FQButton
                                     className='mt-5 bg-primary-900'

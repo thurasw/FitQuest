@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import FQButton from "../../common/FQButton";
 import { useAuth } from "../../../providers/AuthProvider";
 import Container from "../../common/Container";
@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import EditPasswordModal from "./EditPasswordModal";
 import AssignRoutinesModal from "../routines/AssignRoutinesModal";
+import * as Clipboard from 'expo-clipboard';
 
 export default function Profile() {
 
@@ -73,6 +74,20 @@ export default function Profile() {
                     <View className='flex flex-row'>
                         <Text className='font-semibold'>Spent Points: </Text>
                         <Text>{ user.lifetimePoints - user.points }</Text>
+                    </View>
+                    <View className='flex flex-row items-center mt-3'>
+                        <Text className='font-semibold'>Friend code: </Text>
+                        <Text>{ auth.user?.uid ?? '-' }</Text>
+
+                        <FQButton
+                            className='rounded-xl px-0 py-0 ms-3'
+                            onPress={() => {
+                                Clipboard.setStringAsync(auth.user?.uid ?? '')
+                                Alert.alert('Copied to clipboard');
+                            }}
+                        >
+                            <Ionicons name="clipboard-outline" size={18} color="black" />
+                        </FQButton>
                     </View>
                 </View>
                 <View className='mb-10 mt-auto'>

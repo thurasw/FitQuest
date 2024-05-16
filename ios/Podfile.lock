@@ -720,6 +720,8 @@ PODS:
     - ExpoModulesCore
     - FBSDKCoreKit
     - React-Core
+  - ExpoClipboard (5.0.1):
+    - ExpoModulesCore
   - ExpoDevice (5.9.4):
     - ExpoModulesCore
   - ExpoFileSystem (16.0.6):
@@ -2016,6 +2018,7 @@ DEPENDENCIES:
   - expo-dev-menu (from `../node_modules/expo-dev-menu`)
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoAdapterFBSDKNext (from `../node_modules/react-native-fbsdk-next/ios`)
+  - ExpoClipboard (from `../node_modules/expo-clipboard/ios`)
   - ExpoDevice (from `../node_modules/expo-device/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoGL (from `../node_modules/expo-gl`)
@@ -2147,6 +2150,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-dev-menu-interface/ios"
   ExpoAdapterFBSDKNext:
     :path: "../node_modules/react-native-fbsdk-next/ios"
+  ExpoClipboard:
+    :path: "../node_modules/expo-clipboard/ios"
   ExpoDevice:
     :path: "../node_modules/expo-device/ios"
   ExpoFileSystem:
@@ -2300,6 +2305,7 @@ SPEC CHECKSUMS:
   expo-dev-menu: 1b221587615ce11b37a64da5520e9a639496571b
   expo-dev-menu-interface: 7ba029c9d1a82ac22b9b584c00514860b060553e
   ExpoAdapterFBSDKNext: 54e3eb74773147fa2d21de5d824ae6ed6d3907b1
+  ExpoClipboard: b597982124f067ff9f5b89093eb3d97898d5d877
   ExpoDevice: 97307196d8cab694e245752b8a7afacc35c14e03
   ExpoFileSystem: a9273932e69a9a1e1a8d01b6ba895bb8294bbea2
   ExpoGL: 085542f97b13f2428ac2edb077c9a90f4566944d

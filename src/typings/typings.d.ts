@@ -63,5 +63,9 @@ declare global {
             type: string;
             id: string;
         }
+
+        interface Friend {
+            accepted: boolean;
+        }
     }
 }

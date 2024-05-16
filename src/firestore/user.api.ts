@@ -1,4 +1,4 @@
-import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import { QueryFn, useFirestoreCollection, useFirestoreDocument } from './useFirestore';
 import { useAuth } from '../providers/AuthProvider';
 

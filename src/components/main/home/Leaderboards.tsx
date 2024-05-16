@@ -1,18 +1,23 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, Pressable, ActivityIndicator } from "react-native";
 import { AvatarImage } from "../avatar/Avatar";
 import { get2DAvatarModel } from "../../../api/endpoints.api";
 import { BadgeImage } from "./HomeHeader";
 import { getCurrentLevel, getLevelImage } from "../../../utils/points.utils";
-import FQButton from "../../common/FQButton";
-import { Ionicons } from '@expo/vector-icons';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk-next';
 import { getTrackingPermissionsAsync, requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
-import { editUser, useUser, useUsers } from "../../../firestore/user.api";
+import { editUser, useUsers } from "../../../firestore/user.api";
 import { useAuth } from "../../../providers/AuthProvider";
 import { useEffect, useState } from "react";
 import firestore from "@react-native-firebase/firestore";
+import LeaderboardsModal from "./LeaderboardsModal";
+import { getFriendDocument, useFriends } from "../../../firestore/friends.api";
+
+type Friend = { id: string; isPending: boolean; accepted: boolean };
 
 export default function Leaderboards({ user } : { user: FitQuest.User }) {
+
+    //modal
+    const [ showModal, setShowModal ] = useState(false);
 
     const auth = useAuth();
     const connectFb = async() => {
@@ -39,10 +44,6 @@ export default function Leaderboards({ user } : { user: FitQuest.User }) {
         }
     }
 
-    useEffect(() => {
-        getFriends();
-    }, [ user.facebookToken ]);
-
     const getFriends = async() => {
         if (!user.facebookToken) return;
 
@@ -51,7 +52,6 @@ export default function Leaderboards({ user } : { user: FitQuest.User }) {
         }, (err, result) => {
             if (err) {
                 console.error(err);
-                return Alert.alert('Error', 'An error occurred while connecting to Facebook. Please try again later.');
             }
 
             const friends = (result?.data as any).map((f: any) => f.id);
@@ -61,52 +61,68 @@ export default function Leaderboards({ user } : { user: FitQuest.User }) {
         new GraphRequestManager().addRequest(friendsReq).start();
     }
 
-    const [ friends, setFriends ] = useState<string[]>([]);
-    const { data: users } = useUsers((query) => {
-        if (!user.facebookId) return query.where('firstName', '==', user.firstName).where('lastName', '==', user.lastName).limit(1);
-        if (friends.length === 0) return query.where('facebookId', '==', user.facebookId)
+    const { snapshot: friendsSnapshot, data: friendsData } = useFriends();
+    const [ friends, setFriends ] = useState<Friend[]>([]);
+
+    useEffect(() => {
+        if (!friendsSnapshot) return;
+
+        const f = friendsSnapshot.docs
+        .map(async (d) => ({
+            id: d.id,
+            ...d.data(),
+            isPending: (await getFriendDocument(d.id, auth.user!.uid).get()).data()?.accepted === false
+        }));
+
+        Promise.all(f)
+        .then(setFriends)
+        .catch(console.error);
+    }, [ friendsData ]);
+
+    const { snapshot: uData } = useUsers((query) => {
+        // You've accepted and they've accepted
+        const filtered = friends.filter(f => f.accepted && !f.isPending).map(f => f.id);
+
+        if (filtered.length === 0) return query.where(firestore.FieldPath.documentId(), '==', auth.user!.uid);
         return query.where(
             firestore.Filter.or(
-                firestore.Filter('facebookId', '==', user.facebookId),
-                firestore.Filter('facebookId', 'in', friends)
+                firestore.Filter(firestore.FieldPath.documentId(), '==', auth.user!.uid),
+                firestore.Filter(firestore.FieldPath.documentId(), 'in', filtered)
             )
-        ).orderBy('lifetimePoints', 'desc');
+        );
     });
+    const users = uData?.docs.map(u => ({ ...u.data(), id: u.id })) ?? [];
 
     return (
-        <View className='p-5 bg-slate-200 rounded-lg'>
-            <Text className='text-xl font-bold text-slate-900'>Leaderboards</Text>
-            <View className='mt-3 flex flex-col gap-2'>
-                {
-                    user.facebookId === null ? (
-                        <>
-                            <LeaderboardItem user={user} />
-                            <FQButton className='bg-blue-800 mt-5 mx-5 flex flex-row items-center' onPress={connectFb}>
-                                <Ionicons name="logo-facebook" size={24} color="white" />
-                                <Text className='text-white ms-3'>Connect to Facebook to find friends</Text>
-                            </FQButton>
-                        </>
-                    ) : users !== undefined && (
-                        <>
-                            {
-                                users.map((u, i) => (
-                                    <LeaderboardItem key={u.facebookId} user={u} />
-                                ))
-                            }
-                        </>
-                    )
-                }
-            </View>
-        </View>
+        <>
+            <Pressable onPress={() => setShowModal(true)}>
+                <View className='p-5 bg-slate-200 rounded-lg'>
+                    <Text className='text-xl font-bold text-slate-900'>Leaderboards</Text>
+                    <View className='mt-3 flex flex-col gap-2'>
+                    { users.length === 0 && (user ? <LeaderboardItem index={1} background='light' user={user} selected /> : <ActivityIndicator /> )}
+                    {
+                        users?.map((u, i) => (
+                            <LeaderboardItem key={u.facebookId} index={i + 1} user={u} background='light' selected={u.id === auth.user?.uid} />
+                        ))
+                    }
+                    </View>
+                </View>
+            </Pressable>
+            <LeaderboardsModal show={showModal} onClose={() => setShowModal(false)} />
+        </>
     )
 }
 
 interface LeaderboardItemProps {
     user: FitQuest.User;
+    background: 'light' | 'dark';
+    index: number;
+    selected: boolean;
 }
-function LeaderboardItem({ user } : LeaderboardItemProps) {
+export function LeaderboardItem({ user, background, index, selected } : LeaderboardItemProps) {
     return (
-        <View className='bg-slate-100 rounded-lg pe-3 flex flex-row items-center'>
+        <View className={`${ selected ? 'bg-primary-200' : background === 'light' ? 'bg-slate-100' : 'bg-slate-200' } rounded-lg px-3 flex flex-row flex-nowrap items-center`}>
+            <Text className='text-3xl font-bold text-slate-400'> {index}. </Text>
             <AvatarImage
                 height={60}
                 url={get2DAvatarModel(user.rpm.avatarId!, user.rpm.assets?.updatedAt)}
