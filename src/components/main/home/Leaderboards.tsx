@@ -63,6 +63,7 @@ export default function Leaderboards({ user } : { user: FitQuest.User }) {
 
     const [ friends, setFriends ] = useState<string[]>([]);
     const { data: users } = useUsers((query) => {
+        if (!user.facebookId) return query.where('firstName', '==', user.firstName).where('lastName', '==', user.lastName).limit(1);
         if (friends.length === 0) return query.where('facebookId', '==', user.facebookId)
         return query.where(
             firestore.Filter.or(
